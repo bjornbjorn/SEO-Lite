@@ -15,7 +15,7 @@ class Seo_lite {
 	
 	function Seo_lite()
 	{		
-		$this->EE =& get_instance(); // Make a local reference to the ExpressionEngine super object
+        $this->EE =& get_instance(); // Make a local reference to the ExpressionEngine super object
 
         $entry_id = $this->_get_param('entry_id');
         $site_id = $this->_get_param('site_id', $this->EE->config->item('site_id'));
