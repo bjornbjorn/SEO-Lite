@@ -1,6 +1,6 @@
 <?php
 
-$lang['seo_lite'] = 'SEO Lite';
+$lang['seo_lite'] = 'SEO-Lite';
 $lang['seo_lite_module_name'] = "SEO Lite";
 $lang['seo_lite_module_description'] = "One calorie SEO module, no sugar added!";
 $lang['welcome'] = "Welcome to SEO Lite";
