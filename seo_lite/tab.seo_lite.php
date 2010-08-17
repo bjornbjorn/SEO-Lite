@@ -36,7 +36,7 @@ class Seo_lite_tab {
 
         $settings[] = array(
            'field_id' => 'seo_lite_title',
-           'field_label' => lang('title'),
+           'field_label' => lang('seotitle'),
            'field_required' => 'n',
            'field_data' => $title,
            'field_list_items' => '',
@@ -52,7 +52,7 @@ class Seo_lite_tab {
 
         $settings[] = array(
            'field_id' => 'seo_lite_keywords',
-           'field_label' => lang('keywords'),
+           'field_label' => lang('seokeywords'),
            'field_required' => 'n',
            'field_data' => $keywords,
            'field_list_items' => '',
@@ -68,7 +68,7 @@ class Seo_lite_tab {
 
         $settings[] = array(
            'field_id' => 'seo_lite_description',
-           'field_label' => lang('description'),
+           'field_label' => lang('seodescription'),
            'field_required' => 'n',
            'field_data' => $description,
            'field_list_items' => '',

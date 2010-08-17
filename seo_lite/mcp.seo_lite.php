@@ -33,7 +33,13 @@ class Seo_lite_mcp
 	{
 		$vars = array();
 
-        $config = $this->EE->db->get('seolite_config');
+        $site_id = $this->EE->config->item('site_id');
+        $config = $this->EE->db->get_where('seolite_config', array('site_id' => $site_id));
+
+        if($config->num_rows() == 0) // we did not find any config for this site id, so just load any other
+        {
+            $config = $this->EE->db->get_where('seolite_config');
+        }
 
 		$vars['template'] = $config->row('template');
         $vars['default_description'] = $config->row('default_description');
@@ -48,12 +54,24 @@ class Seo_lite_mcp
         $default_keywords = $this->EE->input->post('seolite_default_keywords');
         $default_description = $this->EE->input->post('seolite_default_description');
 
-        $this->EE->db->update('seolite_config', array(
-            'template' => $template,
-            'default_keywords' => $default_keywords,
-            'default_description' => $default_description,
-        ));
+        $site_id = $this->EE->config->item('site_id');
+        $config = $this->EE->db->get_where('seolite_config', array('site_id' => $site_id));
 
+        $data_arr = array(
+                'template' => $template,
+                'default_keywords' => $default_keywords,
+                'default_description' => $default_description,
+            );
+
+        if($config->num_rows() == 0)
+        {
+            $data_arr['site_id'] = $site_id;
+            $this->EE->db->insert('seolite_config', $data_arr);
+        }
+        else
+        {
+            $this->EE->db->update('seolite_config', $data_arr);
+        }
 
 		$this->EE->session->set_flashdata('message_success', lang('settings_saved'));
 		$this->EE->functions->redirect($this->base);

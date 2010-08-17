@@ -31,7 +31,7 @@ class Seo_lite {
             }
             else
             {
-                $where['entry_id'] = $entry_id;
+                $where['channel_titles.entry_id'] = $entry_id;
             }
             $this->EE->db->where($where);
             $this->EE->db->join('seolite_config', 'seolite_config.site_id = channel_titles.site_id');
