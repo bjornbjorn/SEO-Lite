@@ -14,4 +14,4 @@ By *entry_id*: {exp:seo_lite entry_id="{entry_id}"}
 *Static mode* aka I-Will-Provide-Values-In-Template: (this will output "About Us" for the title tag but still use the default keywords/description for the site): {exp:seo_lite default_title="About us"}
 *Static mode* with everything overridden: {exp:seo_lite default_title="About us" default_keywords="new, keywords" default_description="This description is unique for this page"}
 
-"Click here for more info / install docs ":http://www.bybjorn.com/466/
+"Click here for more info / install docs":http://www.bybjorn.com/466/
