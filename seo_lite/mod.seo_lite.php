@@ -27,6 +27,7 @@ class Seo_lite {
         $default_description = $this->get_param('default_description');
         $title_prefix = $this->get_param('title_prefix');
         $title_postfix = $this->get_param('title_postfix');
+        $title_separator = $this->get_param('title_separator');
 
         if($use_last_segment)
         {
@@ -51,6 +52,7 @@ class Seo_lite {
             $this->EE->db->join('seolite_config', 'seolite_config.site_id = channel_titles.site_id');
             $this->EE->db->join('seolite_content', 'seolite_content.entry_id = channel_titles.entry_id', 'left');
             $q = $this->EE->db->get();
+
             if($q->num_rows() > 0)
             {
                 $seolite_entry = $q->row();
@@ -77,7 +79,7 @@ class Seo_lite {
             );
         }
 
-        $vars['title'] = $title_prefix.$vars['title'].$title_postfix;
+        $vars['title'] = $title_prefix.$vars['title'].$title_postfix.($title_separator?' '.$title_separator.' ':'');        
 
         $this->return_data = $this->EE->TMPL->parse_variables_row($seolite_entry->template, $vars);
         return $this->return_data;
