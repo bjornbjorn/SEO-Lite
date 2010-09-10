@@ -69,17 +69,25 @@
 		$this->table->add_row(array(
 				lang('default_keywords', 'seolite_default_keywords'),
 				form_error('seolite_default_keywords').
-				form_textarea('seolite_default_keywords', set_value('seolite_default_keywords', $default_keywords), 'id="seolite_default_keywords"')
+				form_input('seolite_default_keywords', set_value('seolite_default_keywords', $default_keywords), 'id="seolite_default_keywords"')
 			)
 		);
 		
-		$this->table->add_row(array(
-				lang('default_description', 'seolite_default_description'),
-				form_error('seolite_default_description').
-				form_textarea('seolite_default_description', set_value('seolite_default_description', $default_description), 'id="seolite_default_description"')
-			)
-		);
-		
+        $this->table->add_row(array(
+                lang('default_description', 'seolite_default_description'),
+                form_error('seolite_default_description').
+                form_textarea('seolite_default_description', set_value('seolite_default_description', $default_description), 'id="seolite_default_description"')
+            )
+        );
+
+
+        $this->table->add_row(array(
+            lang('default_title_postfix', 'seolite_default_title_postfix'),
+            form_error('seolite_default_title_postfix').
+            form_input('seolite_default_title_postfix', set_value('seolite_default_title_postfix', $default_title_postfix), 'id="seolite_default_title_postfix"')
+            )
+        );
+
 		echo $this->table->generate();
 	?>
 	<p>

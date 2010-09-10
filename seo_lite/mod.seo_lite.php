@@ -37,7 +37,7 @@ class Seo_lite {
         $got_values = FALSE;
         if($entry_id || $url_title)
         {
-            $this->EE->db->select('channel_titles.entry_id, channel_titles.title as original_title, url_title, seolite_content.title as seo_title, default_keywords, default_description, keywords, description, seolite_config.template');
+            $this->EE->db->select('channel_titles.entry_id, channel_titles.title as original_title, url_title, seolite_content.title as seo_title, default_keywords, default_description, default_title_postfix, keywords, description, seolite_config.template');
             $this->EE->db->from('channel_titles');
             $where = array('channel_titles.site_id' => $site_id);
             if($url_title)
@@ -77,6 +77,11 @@ class Seo_lite {
                 'meta_keywords' => $this->get_preferred_value($default_keywords ,$seolite_entry->default_keywords) ,
                 'meta_description' => $this->get_preferred_value($default_description, $seolite_entry->default_description),
             );
+        }
+
+        if(!$title_postfix && $vars['title'] != '')
+        {
+            $title_postfix = $seolite_entry->default_title_postfix;
         }
 
         $vars['title'] = $title_prefix.$vars['title'].$title_postfix.($title_separator?' '.$title_separator.' ':'');        
