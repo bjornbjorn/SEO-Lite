@@ -13,7 +13,7 @@
  */
 class Seo_lite_upd {
 		
-	var $version        = '1.1'; 
+	var $version        = '1.2'; 
 	var $module_name = "Seo_lite";
 
     function Seo_lite_upd( $switch = TRUE ) 
@@ -150,11 +150,27 @@ class Seo_lite_upd {
 	 * @param $current current version number
 	 * @return boolean indicating whether or not the module was updated 
 	 */
-	
-	function update($current = '')
-	{
-		return FALSE;
-	}
+    function update($current = '')
+    {
+        if ($current == $this->version)
+        {
+            return FALSE;
+        }
+
+        if ($current < '1.2')
+        {
+            $this->EE->load->dbforge();
+
+            $fields = array('default_title_postfix' => array(
+                'type' => 'char',
+                'constraint' => '60',
+                'null' => FALSE));
+
+            $this->EE->dbforge->add_column('seolite_config', $fields);
+        }
+
+        return TRUE;
+    }
     
 }
 
