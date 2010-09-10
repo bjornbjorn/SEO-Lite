@@ -2,6 +2,8 @@
 
 A lightweight addon for ExpressionEngine which will add a tab where the user can specify meta keywords, descriptions and alternatively override the title with a SEO optimized version.
 
+!http://ee.bybjorn.com/seo_lite/seolite_publish_tab.jpg!
+
 h3. Usage examples
 
 There's just one tag - {exp:seolite} - and it will fetch the template you edit in the backend and populate it with the entry specific data (title/keywords/description)
