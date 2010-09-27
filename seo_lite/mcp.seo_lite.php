@@ -73,6 +73,7 @@ class Seo_lite_mcp
         }
         else
         {
+            $this->EE->db->where('site_id', $site_id);
             $this->EE->db->update('seolite_config', $data_arr);
         }
 
