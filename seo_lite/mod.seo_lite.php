@@ -28,6 +28,7 @@ class Seo_lite {
         $title_prefix = $this->get_param('title_prefix');
         $title_postfix = $this->get_param('title_postfix');
         $title_separator = $this->get_param('title_separator');
+        $title_override = $this->get_param('title_override');
 
         if($use_last_segment)
         {
@@ -86,7 +87,17 @@ class Seo_lite {
 
         $vars['title'] = $title_prefix.$vars['title'].$title_postfix.($title_separator?' '.$title_separator.' ':'');        
 
-        $this->return_data = $this->EE->TMPL->parse_variables_row($seolite_entry->template, $vars);
+        $tagdata = $seolite_entry->template;
+
+        /**
+         * Hard override
+         */
+        if($title_override)
+        {
+            $tagdata = preg_replace("~<title>([^<]*)</title>~",'<title>'.$title_override.'</title>', $tagdata ); 
+        }
+
+        $this->return_data = $this->EE->TMPL->parse_variables_row($tagdata, $vars);
         return $this->return_data;
 	}
 

@@ -10,10 +10,11 @@ There's just one tag - {exp:seolite} - and it will fetch the template you edit i
 
 You can fetch by segment or entry_id.
 
-By *segment*: {exp:seo_lite url_title="{segment_3}"}
-By *entry_id*: {exp:seo_lite entry_id="{entry_id}"}
-*Intelligent mode* aka Use-Last-Segment-Mode: {exp:seo_lite use_last_segment="yes"}
-*Static mode* aka I-Will-Provide-Values-In-Template: (this will output "About Us" for the title tag but still use the default keywords/description for the site): {exp:seo_lite default_title="About us"}
-*Static mode* with everything overridden: {exp:seo_lite default_title="About us" default_keywords="new, keywords" default_description="This description is unique for this page"}
-
+ * By *segment*: {exp:seo_lite url_title="{segment_3}"}
+ * By *entry_id*: {exp:seo_lite entry_id="{entry_id}"}
+ * *Intelligent mode* aka Use-Last-Segment-Mode: {exp:seo_lite use_last_segment="yes"}
+ * *Static mode* aka I-Will-Provide-Values-In-Template: (this will output "About Us" for the title tag but still use the default keywords/description for the site): {exp:seo_lite default_title="About us"}
+ * *Static mode* with everything overridden: {exp:seo_lite default_title="About us" default_keywords="new, keywords" default_description="This description is unique for this page"}
+ * *Title override*: (will ignore whatever specified in the template) {exp:seo_lite title_override="This is the only thing i Want inside the HTML title-tags"}
+ 
 "Click here for more info / install docs":http://www.bybjorn.com/466/
