@@ -14,3 +14,5 @@ $lang['seokeywords'] = 'Meta Keywords';
 $lang['keywords_instructions'] = 'A comma separated list of keywords';
 $lang['seodescription'] = 'Meta Description';
 $lang['description_instructions'] = 'Write a short sentence or two that sums up the entry (many search engines will display this in the search results)';
+$lang['default_title_postfix'] = 'Default title postfix';
+$lang['default_title_postfix_description'] = "Whatever you specify here will be appended after the {title}, unless overridden by the <em>title_postfix</em> parameter in the tag.";
