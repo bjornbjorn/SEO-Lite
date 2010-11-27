@@ -20,7 +20,7 @@ class Seo_lite {
         $entry_id = $this->get_param('entry_id');
         $site_id = $this->get_param('site_id', $this->EE->config->item('site_id'));
 
-        $use_last_segment = ($this->get_param('use_last_segment') == 'yes' || $this->get_param('use_last_segment') == 'y');
+        $use_last_segment = ($this->get_param('use_last_segment') == 'yes');
         $url_title = $this->get_param('url_title');
         $default_title = $this->get_param('default_title');    // override default title
         $default_keywords = $this->get_param('default_keywords');
@@ -29,6 +29,7 @@ class Seo_lite {
         $title_postfix = $this->get_param('title_postfix');
         $title_separator = $this->get_param('title_separator');
         $title_override = $this->get_param('title_override');
+        $friendly_segments = ($this->get_param('friendly_segments') == 'yes');
 
         if($use_last_segment)
         {
@@ -88,6 +89,20 @@ class Seo_lite {
         $vars['title'] = $title_prefix.$vars['title'].$title_postfix.($title_separator?' '.$title_separator.' ':'');        
 
         $tagdata = $seolite_entry->template;
+
+        // segment variables are not parsed yet, so we do it ourselves if they are in use in the seo lite template
+        if(preg_match_all('/\{segment_(\d)\}/i', $tagdata, $matches))
+        {
+            $word_separator_replace = ($this->EE->config->item('word_separator') == 'underscore' ? '_' : '-');
+            $tags = $matches[0];
+            $segment_numbers = $matches[1];
+            for($i=0; $i < count($tags); $i++)
+            {
+                $tag = $tags[$i];
+                $segment_value = $friendly_segments ? ucfirst(str_replace($word_separator_replace, ' ', $this->EE->uri->segment($segment_numbers[$i]))) : $this->EE->uri->segment($segment_numbers[$i]);
+                $tagdata = str_replace($tag, $segment_value, $tagdata);
+            }
+        }
 
         /**
          * Hard override
