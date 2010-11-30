@@ -12,7 +12,7 @@
 
 class Seo_lite_tab {
 
-    public function Seo_lite_tab()
+    public function __construct()
     {
         $this->EE =& get_instance();
         $this->EE->lang->loadfile('seo_lite');

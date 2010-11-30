@@ -13,7 +13,7 @@
  */
 class Seo_lite_upd {
 		
-	var $version        = '1.2.1';
+	var $version        = '1.2.2';
 	var $module_name = "Seo_lite";
 
     function Seo_lite_upd( $switch = TRUE ) 
@@ -114,6 +114,32 @@ class Seo_lite_upd {
 																									
 		return TRUE;
 	}
+
+    function tabs()
+    {
+        $tabs['seo_lite'] = array(
+            'seo_lite_title'=> array(
+                'visible'	=> 'true',
+                'collapse'	=> 'false',
+                'htmlbuttons'	=> 'false',
+                'width'		=> '100%'
+                ),
+            'seo_lite_keywords'=> array(
+                'visible'	=> 'true',
+                'collapse'	=> 'false',
+                'htmlbuttons'	=> 'false',
+                'width'		=> '100%'
+                ),
+            'seo_lite_description' => array(
+                'visible'	=> 'true',
+                'collapse'	=> 'false',
+                'htmlbuttons'	=> 'false',
+                'width'		=> '100%',
+                ),            
+            );
+
+        return $tabs;
+    }
 
 	
 	/**
