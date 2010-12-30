@@ -16,6 +16,11 @@ class Seo_lite_upd {
 	var $version        = '1.2.2';
 	var $module_name = "Seo_lite";
 
+    /**
+     * @var Devkit_code_completion
+     */
+    public $EE;
+
     function Seo_lite_upd( $switch = TRUE ) 
     { 
 		// Make a local reference to the ExpressionEngine super object
@@ -111,7 +116,10 @@ class Seo_lite_upd {
             'default_description' => 'Your default description here',
             'default_title_postfix' => ' |&nbsp;',
         ));
-																									
+
+        $this->EE->load->library('layout');
+        $this->EE->layout->add_layout_tabs($this->tabs(), 'seo_lite');
+
 		return TRUE;
 	}
 
@@ -166,7 +174,10 @@ class Seo_lite_upd {
 
         $this->EE->dbforge->drop_table('seolite_content');
         $this->EE->dbforge->drop_table('seolite_config');
-				
+
+        $this->EE->load->library('layout');
+        $this->EE->layout->delete_layout_tabs($this->tabs(), 'seo_lite');
+
 		return TRUE;
 	}
 	
