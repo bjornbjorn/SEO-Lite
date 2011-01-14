@@ -20,7 +20,7 @@ class Seo_lite {
         $entry_id = $this->get_param('entry_id');
         $site_id = $this->get_param('site_id', $this->EE->config->item('site_id'));
 
-        $use_last_segment = ($this->get_param('use_last_segment') == 'yes');
+        $use_last_segment = ($this->get_param('use_last_segment') == 'yes' || $this->get_param('use_last_segment') == 'y');
         $url_title = $this->get_param('url_title');
         $default_title = $this->get_param('default_title');    // override default title
         $default_keywords = $this->get_param('default_keywords');
@@ -29,11 +29,11 @@ class Seo_lite {
         $title_postfix = $this->get_param('title_postfix');
         $title_separator = $this->get_param('title_separator');
         $title_override = $this->get_param('title_override');
-        $friendly_segments = ($this->get_param('friendly_segments') == 'yes');
+        $friendly_segments = ($this->get_param('friendly_segments') == 'yes' || $this->get_param('friendly_segments') == 'y');
 
         if($use_last_segment)
         {
-            $url_title = $this->get_url_title_from_segment();
+            $url_title = $this->get_url_title_from_segment();           
         }
 
         $got_values = FALSE;
@@ -53,6 +53,7 @@ class Seo_lite {
             $this->EE->db->where($where);
             $this->EE->db->join('seolite_config', 'seolite_config.site_id = channel_titles.site_id');
             $this->EE->db->join('seolite_content', 'seolite_content.entry_id = channel_titles.entry_id', 'left');
+
             $q = $this->EE->db->get();
 
             if($q->num_rows() > 0)
@@ -69,7 +70,7 @@ class Seo_lite {
         }
 
         if(!$got_values)
-        {
+        {           
             // no specific entry lookup, but we still want the config
             $q = $this->EE->db->get_where('seolite_config', array('seolite_config.site_id' => $site_id));
             $seolite_entry = $q->row();
