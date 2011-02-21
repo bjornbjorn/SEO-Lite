@@ -32,25 +32,7 @@ class Seo_lite {
         $friendly_segments = ($this->get_param('friendly_segments') == 'yes' || $this->get_param('friendly_segments') == 'y');
         $ignore_last_segments = $this->get_param('ignore_last_segments', FALSE);
 
-        /**
-         * Create canonical URL
-         */
-        if(!$ignore_last_segments)
-        {
-            $canonical_url = $this->EE->functions->fetch_current_uri();
-        }
-        else
-        {
-            $segs = $this->EE->uri->segment_array();
-            $canonical_url_segments = '';
-            $total_segments = count($segs);
-            for($i=1; $i<$total_segments && $i < ($total_segments-$ignore_last_segments); $i++)
-            {
-                $canonical_url_segments .= $segs[$i];
-            }
-
-            $canonical_url = $this->EE->functions->create_url($canonical_url_segments);
-        }
+        $canonical_url = $this->get_canonical_url($ignore_last_segments);
 
         if($use_last_segment)
         {
@@ -183,17 +165,58 @@ class Seo_lite {
             $last_segment = $this->EE->uri->segment($fetch_segment);
         }
 
+        if($this->is_last_segment_pagination_segment())
+        {
+            $last_segment_id = $segment_count-1;
+            $last_segment = $this->EE->uri->segment($last_segment_id);
+        }
+
+
+        return $last_segment;
+    }
+
+    /**
+     * @return void
+     */
+    private function is_last_segment_pagination_segment()
+    {
+        $segment_count = $this->EE->uri->total_segments();
+        $last_segment = $this->EE->uri->segment($segment_count);
         if(substr($last_segment,0,1) == 'P') // might be a pagination page indicator
         {
             $end = substr($last_segment, 1, strlen($last_segment));
-            if ((preg_match( '/^\d*$/', $end) == 1))
-            {
-                $last_segment_id = $segment_count-1;
-                $last_segment = $this->EE->uri->segment($last_segment_id);
-            }
+            return ((preg_match( '/^\d*$/', $end) == 1));
         }
 
-        return $last_segment;
+        return FALSE;
+    }
+
+
+    private function get_canonical_url($ignore_last_segments)
+    {
+        if(!$ignore_last_segments)
+        {
+            $canonical_url = $this->EE->functions->fetch_current_uri();
+
+            if($this->is_last_segment_pagination_segment())
+            {
+                $canonical_url = substr($canonical_url,0, strrpos($canonical_url,'/P'));
+            }
+        }
+        else
+        {
+            $segs = $this->EE->uri->segment_array();
+            $canonical_url_segments = '';
+            $total_segments = count($segs);
+            for($i=1; $i<$total_segments && $i < ($total_segments-$ignore_last_segments); $i++)
+            {
+                $canonical_url_segments .= $segs[$i];
+            }
+
+            $canonical_url = $this->EE->functions->create_url($canonical_url_segments);
+        }
+
+        return $canonical_url;
     }
 
     /**
