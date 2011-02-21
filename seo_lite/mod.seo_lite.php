@@ -30,15 +30,56 @@ class Seo_lite {
         $title_separator = $this->get_param('title_separator');
         $title_override = $this->get_param('title_override');
         $friendly_segments = ($this->get_param('friendly_segments') == 'yes' || $this->get_param('friendly_segments') == 'y');
+        $ignore_last_segments = $this->get_param('ignore_last_segments', FALSE);
+
+        /**
+         * Create canonical URL
+         */
+        if(!$ignore_last_segments)
+        {
+            $canonical_url = $this->EE->functions->fetch_current_uri();
+        }
+        else
+        {
+            $segs = $this->EE->uri->segment_array();
+            $canonical_url_segments = '';
+            $total_segments = count($segs);
+            for($i=1; $i<$total_segments && $i < ($total_segments-$ignore_last_segments); $i++)
+            {
+                $canonical_url_segments .= $segs[$i];
+            }
+
+            $canonical_url = $this->EE->functions->create_url($canonical_url_segments);
+        }
 
         if($use_last_segment)
         {
-            $url_title = $this->get_url_title_from_segment();           
+            $url_title = $this->get_url_title_from_segment($ignore_last_segments);
         }
 
         $got_values = FALSE;
         if($entry_id || $url_title)
         {
+            if($url_title && !$entry_id)    // if we're retrieving by url_title and not entry_id
+            {
+                $pages = $this->EE->config->item('site_pages');
+                if(isset($pages[$site_id]) && isset($pages[$site_id]['uris']))
+                {
+                    $current_uri_string = $this->EE->uri->uri_string();
+                    if($current_uri_string != '')
+                    {
+                        foreach($pages[$site_id]['uris'] as $page_entry_id => $page_uri)
+                        {
+                            if(trim($page_uri,'/') == $current_uri_string)
+                            {
+                                $entry_id = $page_entry_id;
+                                $url_title = FALSE; // pages will override - found entry_id so ignore url_title from now
+                            }
+                        }
+                    }
+                }
+            }
+
             $this->EE->db->select('channel_titles.entry_id, channel_titles.title as original_title, url_title, seolite_content.title as seo_title, default_keywords, default_description, default_title_postfix, keywords, description, seolite_config.template');
             $this->EE->db->from('channel_titles');
             $where = array('channel_titles.site_id' => $site_id);
@@ -82,12 +123,13 @@ class Seo_lite {
             );
         }
 
-        if(!$title_postfix && $vars['title'] != '')
+        if($vars['title'] != '')
         {
-            $title_postfix = $seolite_entry->default_title_postfix;
+            $title_postfix .= $seolite_entry->default_title_postfix;
         }
 
-        $vars['title'] = $title_prefix.$vars['title'].$title_postfix.($title_separator?' '.$title_separator.' ':'');        
+        $vars['title'] = $title_prefix.$vars['title'].$title_postfix.($title_separator?' '.$title_separator.' ':'');
+        $vars['canonical_url'] = $canonical_url;
 
         $tagdata = $seolite_entry->template;
 
@@ -123,12 +165,23 @@ class Seo_lite {
      *
      * @return last segment
      */
-    private function get_url_title_from_segment()
+    private function get_url_title_from_segment($ignore_segments=FALSE)
     {
         $segment_count = $this->EE->uri->total_segments();
-        $last_segment_absolute = $this->EE->uri->segment($segment_count);
-        $last_segment = $last_segment_absolute;
-        $last_segment_id = $segment_count;
+        if(!$ignore_segments)
+        {
+            $last_segment_absolute = $this->EE->uri->segment($segment_count);
+            $last_segment = $last_segment_absolute;
+        }
+        else
+        {
+            $fetch_segment = $segment_count - $ignore_segments;
+            if($segment_count<1)
+            {
+                $segment_count = 1;
+            }
+            $last_segment = $this->EE->uri->segment($fetch_segment);
+        }
 
         if(substr($last_segment,0,1) == 'P') // might be a pagination page indicator
         {

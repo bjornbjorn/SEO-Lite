@@ -1,0 +1,13 @@
+Changelog for SEOLite
+=====================
+
+
+1.2.3 - 21st feb 2011
+---------------------
+
+* Added support for {canonical_url} for use in the SEOLite template like this:	<link rel=“canonical” href='{canonical_url}' />
+* Added 'ignore_last_segments' parameter which tells SEO Lite to ignore the X last url segments (ie. 2 would be logical for URL: entries/some_entry_here/sort/asc)
+* Improved support for pages - the "Pages URI" will now override "URL Title"
+* Minor change in how the "title_postfix" parameter works - the default postfix (specified in admin) will now always be added after this
+
+Docs have been updated with the new tags: http://ee.bybjorn.com/seo_lite/

@@ -21,12 +21,19 @@ class Seo_lite_mcp
 		$this->EE =& get_instance(); 
 		$this->base	 	 = BASE.AMP.'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module='.$this->module_name;
 		$this->form_base = 'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module='.$this->module_name;
-		
+
+        // uncomment this if you want navigation buttons at the top
+		$this->EE->cp->set_right_nav(array(
+				'settings'			=> $this->base,
+				'docs'	=> 'http://ee.bybjorn.com/seo_lite',
+			));
+
+
 		//  Onward!
 		$this->EE->load->library('table');
 		$this->EE->load->library('javascript');
 		$this->EE->load->helper('form');
-		
+		$this->EE->lang->loadfile('seo_lite');
 	}
 
 	function index() 
