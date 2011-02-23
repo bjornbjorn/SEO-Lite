@@ -2,59 +2,8 @@
 
 A lightweight addon for ExpressionEngine which will add a tab where the user can specify meta keywords, descriptions and alternatively override the title with a SEO optimized version.
 
-!http://ee.bybjorn.com/seo_lite/seolite_publish_tab.jpg!
+* "SEO Lite product page":http://www.addonbakery.com/expressionengine-addons/seolite.html
+* "SEO Lite - Full Documentation":http://www.addonbakery.com/docs/expressionengine/SEO_Lite_-_Installation_Usage.html
+* "SEO Lite Changelog":http://www.addonbakery.com/docs/expressionengine/SEO_Lite_-_Installation_Usage.html#changelog
 
-h3. Usage examples
-
-There's just one tag - {exp:seolite} - and it will fetch the template you edit in the backend and populate it with the entry specific data (title/keywords/description)
-
-You can fetch by segment or entry_id.
-
- * By *segment*: {exp:seo_lite url_title="{segment_3}"}
- * By *entry_id*: {exp:seo_lite entry_id="{entry_id}"}
- * *Intelligent mode* aka Use-Last-Segment-Mode: {exp:seo_lite use_last_segment="yes"}
- * *Static mode* aka I-Will-Provide-Values-In-Template: (this will output "About Us" for the title tag but still use the default keywords/description for the site): {exp:seo_lite default_title="About us"}
- * *Static mode* with everything overridden: {exp:seo_lite default_title="About us" default_keywords="new, keywords" default_description="This description is unique for this page"}
- * *Title override*: (will ignore whatever specified in the template) {exp:seo_lite title_override="This is the only thing i Want inside the HTML title-tags"}
-
-h3. Parameters
-
- * entry_id: The id of the entry you wish to get metadata about
- * url_title: The url title of the entry you wish to get metadata about (perfect for segments);
- * use_last_segment: y/n - use this if you want to fetch metadata based on the last segment (Note; this will work w/pagination as well)
- * default_title: Override the default title in the template
- * default_keywords: Override the default keywords in the template
- * default_description: Override the default description in the template
- * title_prefix: A string to prefix the title with
- * title_postfix: A string to postfix the title with
- * title_override: Title hard override - ignore whatever is set in the database and use this title instead
- * friendly_segments: y/n (default is n) if {segment_x} is used in the SEO Lite template make it friendly (ie. 'this_is_some_url_title_segment' will be 'This is some url title segment')
-
-h3. The template
-
-The SEO Lite template may contain most variables available in standard EE templates.
-
-<pre>
-	<code>
-<title>{title} - {site_name}</title>
-<meta name='keywords' content='{meta_keywords}' />
-<meta name='description' content='{meta_description}' />
-</code>
-</pre>
- 
-You can also use segments (note how to do conditionals here)
-<pre>
-	<code>
-<title>{site_name} - {if '{segment_2}' != ''}{segment_2} - {/if}{title}</title>
-<meta name='keywords' content='{meta_keywords}' />
-<meta name='description' content='{meta_description}' />
-	</code>
-</pre>
-
-"Click here for more info / install docs":http://www.bybjorn.com/466/
-
-h3. Support?
-
-"Please place support requests in the SEO-Lite forum over at Devot:ee":http://devot-ee.com/add-ons/seolite/
-
-If you like this addon please rate it / review it there. If you don't like it, tell me in the support forums and I'll see if it's something that can be fixed! :-)
+See our list of "ExpressionEngine Addons here":http://www.addonbakery.com/expressionengine-addons.html
