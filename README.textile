@@ -1,7 +1,6 @@
-﻿
-h3. SEO Lite for ExpressionEngine 2.x
+﻿SEO Lite is a lightweight addon for ExpressionEngine which will add a tab where the user can specify meta keywords, descriptions and alternatively override the title with a SEO optimized version.
 
-A lightweight addon for ExpressionEngine which will add a tab where the user can specify meta keywords, descriptions and alternatively override the title with a SEO optimized version.
+h3. SEO Lite links
 
 * "SEO Lite product page":http://www.addonbakery.com/expressionengine-addons/seolite.html
 * "SEO Lite - Full Documentation":http://www.addonbakery.com/docs/expressionengine/SEO_Lite_-_Installation_Usage.html
