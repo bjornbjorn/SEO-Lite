@@ -13,7 +13,7 @@
  */
 class Seo_lite_upd {
 		
-	var $version        = '1.2.3';
+	var $version        = '1.2.4';
 	var $module_name = "Seo_lite";
 
     /**
@@ -204,6 +204,30 @@ class Seo_lite_upd {
                 'null' => FALSE));
 
             $this->EE->dbforge->add_column('seolite_config', $fields);
+        }
+
+        if($current < '1.2.4')
+        {
+
+            // change the coltype of default_title_postifx, char(60) would strip trailing space
+            $this->EE->db->query("ALTER TABLE ".$this->EE->db->dbprefix('seolite_config')." CHANGE `default_title_postfix` `default_title_postfix` VARCHAR( 60 )");
+
+            // increase size of keywords/desc field
+            $this->EE->db->query("ALTER TABLE ".$this->EE->db->dbprefix('seolite_config')." CHANGE `default_keywords` `default_keywords` VARCHAR( 1024 ) ");
+            $this->EE->db->query("ALTER TABLE ".$this->EE->db->dbprefix('seolite_config')." CHANGE `default_description` `default_description` VARCHAR( 1024 )");
+
+            $configs = $this->EE->db->get_where('seolite_config');
+            foreach($configs->result() as $config)
+            {
+                $upd_arr = array(
+                    'template' => str_replace('&nbsp;', ' ', htmlspecialchars_decode($config->template, ENT_QUOTES)),
+                    'default_description' => str_replace('&nbsp;', ' ', htmlspecialchars_decode($config->default_description, ENT_QUOTES)),
+                    'default_keywords' => str_replace('&nbsp;', ' ', htmlspecialchars_decode($config->default_keywords, ENT_QUOTES)),
+                    'default_title_postfix' => str_replace('&nbsp;', ' ', htmlspecialchars_decode($config->default_title_postfix, ENT_QUOTES)),
+                );
+                
+                $this->EE->db->update('seolite_config', $upd_arr, array('seolite_config_id'=>$config->seolite_config_id));
+            }
         }
 
         return TRUE;

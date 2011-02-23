@@ -1,6 +1,15 @@
 Changelog for SEOLite
 =====================
 
+1.2.4 - 23rd feb 2011
+---------------------
+
+This update includes database changes and requires that you visit the module in the backend (EE will then automatically run the update script).)
+
+* htmlspecialchars() all metadata before output (there were problems with the use of quotes etc. in default description)
+* Increased size of the default keywords / descripton to 1024 chars
+* Changed coltype of default_title_postfix to VARCHAR(60) instead of CHAR(60) (char would strip trailing space, thus the need for &nbsp; .. that's no longer needed)
+
 
 1.2.3 - 21st feb 2011
 ---------------------
