@@ -1,6 +1,11 @@
 Changelog for SEOLite
 =====================
 
+Release Candidate :-P
+---------------------
+* French language file added
+
+
 1.2.4 - 23rd feb 2011
 ---------------------
 
