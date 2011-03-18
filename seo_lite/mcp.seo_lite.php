@@ -53,7 +53,7 @@ class Seo_lite_mcp
         $vars['default_keywords'] = $config->row('default_keywords');
         $vars['default_title_postfix'] = $config->row('default_title_postfix');
 
-		return $this->content_wrapper('index', 'welcome', $vars);
+		return $this->content_wrapper('index', 'seo_lite_welcome', $vars);
 	}
 	
 	function save_settings()

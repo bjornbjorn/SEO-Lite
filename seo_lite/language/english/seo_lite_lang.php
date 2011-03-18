@@ -3,7 +3,7 @@
 $lang['seo_lite'] = 'SEO Lite';
 $lang['seo_lite_module_name'] = "SEO Lite";
 $lang['seo_lite_module_description'] = "One calorie SEO module, no sugar added!";
-$lang['welcome'] = "Welcome to SEO Lite";
+$lang['seo_lite_welcome'] = "Welcome to SEO Lite";
 $lang['default_keywords'] = "Default page keywords";
 $lang['default_description'] = "Default page description";
 $lang['current_value'] = 'Current Value';
