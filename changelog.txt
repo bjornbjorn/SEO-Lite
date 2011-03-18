@@ -4,7 +4,7 @@ Changelog for SEOLite
 Release Candidate :-P
 ---------------------
 * French language file added
-
+* Renamed language key "welcome" to "seo_lite_welcome" as this sometimes confliced with other modules who used the same language key
 
 1.2.4 - 23rd feb 2011
 ---------------------
