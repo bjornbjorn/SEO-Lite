@@ -103,7 +103,7 @@ class Seo_lite_upd {
                 'null' => FALSE),
 
             'default_title_postfix' => array(
-                'type' => 'char',
+                'type' => 'varchar',
                 'constraint' => '60',
                 'null' => FALSE),
 
