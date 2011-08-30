@@ -15,7 +15,7 @@
 
                 $('#view_instructions').click(function(){
                     if($('#instructions').is(':visible')) {
-                        $('#instructions').hide('hide');
+                        $('#instructions').hide('fast');
                         $('#view_instructions').html('Show instructions');
                     }
                     else
