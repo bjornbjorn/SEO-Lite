@@ -45,7 +45,7 @@ class Seo_lite {
 
         if($category_url_title)
         {
-            $this->EE->db->select('cat_name, cat_description, default_keywords, default_description, default_title_postfix, template')->from('categories')->where('cat_url_title', $category_url_title);
+            $this->EE->db->select('cat_name, cat_description, default_keywords, default_description, default_title_postfix, template')->from('categories')->where(array('cat_url_title' => $category_url_title, 'categories.site_id' => $site_id));
             $this->EE->db->join('seolite_config', 'seolite_config.site_id = categories.site_id');
             $q = $this->EE->db->get();
             if($q->num_rows() > 0)
