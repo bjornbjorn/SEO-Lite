@@ -1,13 +1,21 @@
 Changelog for SEOLite
 =====================
+The dates in this changelog use international date format: YYYY-MM-DD (ISO8601)
 
-Release Candidate :-P
----------------------
+
+1.3 - 2011-08-30
+----------------
+* Added support for category_url_title for fetching titles/descriptions of categories (for use as seo metadata)
+* Added support for using seo_lite as a tag pair (if done the template won't be used, good for overriding etc.)
+* Fixed minor bug in backend where the instructions would not hide after clicking view/hide
+
+1.2.5 - 2011-03-18
+------------------
 * French language file added
 * Renamed language key "welcome" to "seo_lite_welcome" as this sometimes confliced with other modules who used the same language key
 
-1.2.4 - 23rd feb 2011
----------------------
+1.2.4 - 2011-02-23
+------------------
 
 This update includes database changes and requires that you visit the module in the backend (EE will then automatically run the update script).)
 
@@ -16,8 +24,8 @@ This update includes database changes and requires that you visit the module in 
 * Changed coltype of default_title_postfix to VARCHAR(60) instead of CHAR(60) (char would strip trailing space, thus the need for &nbsp; .. that's no longer needed)
 
 
-1.2.3 - 21st feb 2011
----------------------
+1.2.3 - 2011-02-21
+------------------
 
 * Added support for {canonical_url} for use in the SEOLite template like this:	<link rel=“canonical” href='{canonical_url}' />
 * Added 'ignore_last_segments' parameter which tells SEO Lite to ignore the X last url segments (ie. 2 would be logical for URL: entries/some_entry_here/sort/asc)
