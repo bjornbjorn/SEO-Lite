@@ -2,9 +2,13 @@ Changelog for SEOLite
 =====================
 The dates in this changelog use international date format: YYYY-MM-DD (ISO8601)
 
+1.3.1 - 2011-09-02
+------------------
+* Fix for canonical URLs on pages / structure pages
+
 
 1.3 - 2011-08-30
-----------------
+------------------
 * Added support for category_url_title for fetching titles/descriptions of categories (for use as seo metadata)
 * Added support for using seo_lite as a tag pair (if done the template won't be used, good for overriding etc.)
 * Fixed minor bug in backend where the instructions would not hide after clicking view/hide

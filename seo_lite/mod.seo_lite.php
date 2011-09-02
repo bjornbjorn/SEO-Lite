@@ -34,7 +34,7 @@ class Seo_lite {
         $ignore_last_segments = $this->get_param('ignore_last_segments', FALSE);
         $category_url_title = $this->get_param('category_url_title');
 
-        $canonical_url = $this->get_canonical_url($ignore_last_segments);
+        $canonical_url = '';
 
         if($use_last_segment)
         {
@@ -77,6 +77,7 @@ class Seo_lite {
                             {
                                 $entry_id = $page_entry_id;
                                 $url_title = FALSE; // pages will override - found entry_id so ignore url_title from now
+                                $canonical_url = $this->get_canonical_url($ignore_last_segments, $page_uri);
                             }
                         }
                     }
@@ -217,16 +218,47 @@ class Seo_lite {
     }
 
 
-    private function get_canonical_url($ignore_last_segments)
+    private function get_canonical_url($ignore_last_segments, $page_uri = FALSE)
     {
         if(!$ignore_last_segments)
         {
-            $canonical_url = $this->EE->functions->fetch_current_uri();
+            $segments = explode('/',$_SERVER['REQUEST_URI']);
+            $segment_count = count($segments);
 
-            if($this->is_last_segment_pagination_segment())
+            $append_to_url = FALSE;
+
+            if($segment_count > 0)
             {
-                $canonical_url = substr($canonical_url,0, strrpos($canonical_url,'/P'));
+                $last_segment = $segments[$segment_count-1];
+                if(substr($last_segment,0,1) == 'P') // might be a pagination page indicator
+                {
+                    $end = substr($last_segment, 1, strlen($last_segment));
+                    if((preg_match( '/^\d*$/', $end)) && $end > 0)  // if it's a pagination segment and the page is > 0 we append the page number
+                    {
+                        $append_to_url = $last_segment;
+                    }
+                }
             }
+
+            $canonical_url = '';
+
+            // if we got a page_uri, we use that as the blueprint
+            if($page_uri)
+            {
+
+                $canonical_url = $this->EE->functions->create_url($page_uri) . (substr($page_uri, strlen($page_uri)-1) == '/' ? '/' : '');
+            }
+            else
+            {
+                $canonical_url = $this->EE->functions->fetch_current_uri();
+            }
+
+            if($append_to_url)
+            {
+                $canonical_url = $canonical_url . (substr($canonical_url, strlen($canonical_url)-1) == '/' ? $append_to_url : '/' . $append_to_url);
+            }
+
+            return $canonical_url;
         }
         else
         {
