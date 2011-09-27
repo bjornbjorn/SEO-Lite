@@ -13,7 +13,7 @@ class Seo_lite {
 
 	var $return_data;
 	
-	public function __construct()
+	public function Seo_lite() // backwards compatible __construct() won't work
 	{		
         $this->EE =& get_instance(); // Make a local reference to the ExpressionEngine super object
 
