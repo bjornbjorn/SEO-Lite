@@ -2,6 +2,10 @@ Changelog for SEOLite
 =====================
 The dates in this changelog use international date format: YYYY-MM-DD (ISO8601)
 
+1.3.2 - 2011-09-27
+------------------
+* Changed constructor name
+
 1.3.1 - 2011-09-02
 ------------------
 * Fix for canonical URLs on pages / structure pages
