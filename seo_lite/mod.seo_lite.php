@@ -34,7 +34,7 @@ class Seo_lite {
         $ignore_last_segments = $this->get_param('ignore_last_segments', FALSE);
         $category_url_title = $this->get_param('category_url_title');
 
-        $canonical_url = '';
+        $canonical_url = $this->get_canonical_url($ignore_last_segments);
 
         if($use_last_segment)
         {
