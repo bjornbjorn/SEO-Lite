@@ -16,6 +16,10 @@ class Seo_lite_tab {
     {
         $this->EE =& get_instance();
         $this->EE->lang->loadfile('seo_lite');
+
+        if($this->EE->config->item('seo_lite_tab_title')) {
+            $this->EE->lang->language['seo_lite'] = $this->EE->config->item('seo_lite_tab_title');
+        }
     }
 
     public function publish_tabs($channel_id, $entry_id = '')
