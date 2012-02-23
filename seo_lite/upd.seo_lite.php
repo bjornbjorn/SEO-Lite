@@ -13,7 +13,7 @@
  */
 class Seo_lite_upd {
 		
-	var $version        = '1.3.4';
+	var $version        = '1.3.5';
 	var $module_name = "Seo_lite";
 
     /**
@@ -95,11 +95,11 @@ class Seo_lite_upd {
                 'type' => 'text',),
             'default_keywords' => array(
                 'type' => 'varchar',
-                'constraint' => '255',
+                'constraint' => '1024',
                 'null' => FALSE,),
             'default_description' => array(
                 'type' => 'varchar',
-                'constraint' => '255',
+                'constraint' => '1024',
                 'null' => FALSE),
 
             'default_title_postfix' => array(
@@ -233,6 +233,11 @@ class Seo_lite_upd {
                 
                 $this->EE->db->update('seolite_config', $upd_arr, array('seolite_config_id'=>$config->seolite_config_id));
             }
+        }
+
+        if($current < '1.3.5') {
+            $sql = "ALTER TABLE `".$this->EE->db->dbprefix('seolite_config')."` CHANGE `default_keywords` `default_keywords` VARCHAR( 1024 ), CHANGE `default_description` `default_description` VARCHAR( 1024 )";
+            $this->EE->db->query($sql);
         }
 
         return TRUE;
