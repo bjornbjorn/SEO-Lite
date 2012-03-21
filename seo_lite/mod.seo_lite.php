@@ -19,6 +19,8 @@ class Seo_lite {
 
         $entry_id = $this->get_param('entry_id');
         $site_id = $this->get_param('site_id', $this->EE->config->item('site_id'));
+        
+        $channel = $this->EE->TMPL->fetch_param('channel');
 
         $use_last_segment = ($this->get_param('use_last_segment') == 'yes' || $this->get_param('use_last_segment') == 'y');
         $tag_prefix = $this->get_param('tag_prefix');
@@ -98,6 +100,13 @@ class Seo_lite {
             $this->EE->db->where($where);
             $this->EE->db->join('seolite_config', 'seolite_config.site_id = channel_titles.site_id');
             $this->EE->db->join('seolite_content', 'seolite_content.entry_id = channel_titles.entry_id', 'left');
+            
+            if ($channel !== FALSE)
+            {
+              $this->EE->db
+                ->join('channels', 'channel_titles.channel_id = channels.channel_id')
+                ->where('channels.channel_name', $channel);
+            }
 
             $q = $this->EE->db->get();
 
