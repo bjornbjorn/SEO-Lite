@@ -217,12 +217,23 @@ class Seo_lite {
         return FALSE;
     }
 
+	private function get_request_uri() 
+	{
+		if(!isset($_SERVER['REQUEST_URI'])) {
+			$_SERVER['REQUEST_URI'] = $_SERVER['SCRIPT_NAME'];
+			if($_SERVER['QUERY_STRING']) {
+				$_SERVER['REQUEST_URI'] .= '?' . $_SERVER['QUERY_STRING'];
+			}
+		}
+		return $_SERVER['REQUEST_URI'];
+	}
+
 
     private function get_canonical_url($ignore_last_segments, $page_uri = FALSE)
     {
         if(!$ignore_last_segments)
         {
-            $segments = explode('/',$_SERVER['REQUEST_URI']);
+            $segments = explode('/', $this->get_request_uri());
             $segment_count = count($segments);
 
             $append_to_url = FALSE;
