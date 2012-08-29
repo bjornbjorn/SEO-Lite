@@ -26,7 +26,7 @@ class Seo_lite_tab {
     {
         $settings = array();
 
-        $title = $keywords = $description = '';
+        $title = $keywords = $description = $extra = '';
         if($entry_id)
         {
             $q = $this->EE->db->get_where('seolite_content', array('entry_id' => $entry_id));
@@ -35,6 +35,7 @@ class Seo_lite_tab {
                 $title = $q->row('title');
                 $keywords = $q->row('keywords');
                 $description = $q->row('description');
+                $extra = $q->row('extra');
             }
         }
 
@@ -86,6 +87,23 @@ class Seo_lite_tab {
            'field_ta_rows'		   => 5,
 
        );
+       
+        $settings[] = array(
+           'field_id' => 'seo_lite_extra',
+           'field_label' => lang('seoextra'),
+           'field_required' => 'n',
+           'field_data' => $extra,
+           'field_list_items' => '',
+           'field_fmt' => '',
+           'field_instructions' => lang('extra_instructions'),
+           'field_show_fmt' => 'n',
+           'field_fmt_options' => array(),
+           'field_pre_populate' => 'n',
+           'field_text_direction' => 'ltr',
+           'field_type' => 'textarea',
+           'field_ta_rows'		   => 5,
+
+       );
 
         return $settings;
     }
@@ -113,7 +131,9 @@ class Seo_lite_tab {
             'title' => $seo_lite_data['seo_lite_title'],
             'keywords' => $seo_lite_data['seo_lite_keywords'],
             'description' => $seo_lite_data['seo_lite_description'],
+            'extra' => $seo_lite_data['seo_lite_extra'],
         );
+        
 
         $q = $this->EE->db->get_where('seolite_content', array('site_id' => $site_id, 'entry_id' => $entry_id));
         if($q->num_rows())
