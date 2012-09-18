@@ -254,19 +254,19 @@ class Seo_lite {
             $canonical_url = '';
 
             // if we got a page_uri, we use that as the blueprint
+
             if($page_uri)
             {
-
                 $canonical_url = $this->EE->functions->create_url($page_uri) . (substr($page_uri, strlen($page_uri)-1) == '/' ? '/' : '');
+
+                if($append_to_url)
+                {
+                    $canonical_url = $canonical_url . (substr($canonical_url, strlen($canonical_url)-1) == '/' ? $append_to_url : '/' . $append_to_url);
+                }
             }
             else
             {
                 $canonical_url = $this->EE->functions->fetch_current_uri();
-            }
-
-            if($append_to_url)
-            {
-                $canonical_url = $canonical_url . (substr($canonical_url, strlen($canonical_url)-1) == '/' ? $append_to_url : '/' . $append_to_url);
             }
 
             return $canonical_url;
