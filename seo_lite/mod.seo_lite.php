@@ -129,9 +129,10 @@ class Seo_lite {
 
         if($vars[$tag_prefix.'title'] != '')
         {
-            $title_postfix .= $seolite_entry->default_title_postfix;
+            $title_postfix .= str_replace('&nbsp;',' ',$seolite_entry->default_title_postfix);
         }
 
+        $vars[$tag_prefix.'entry_title'] = $vars[$tag_prefix.'title'];
         $vars[$tag_prefix.'title'] = $title_prefix.$vars[$tag_prefix.'title'].$title_postfix.($title_separator?' '.$title_separator.' ':'');
         $vars[$tag_prefix.'canonical_url'] = $canonical_url;
 
