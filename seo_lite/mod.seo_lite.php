@@ -12,16 +12,17 @@
 class Seo_lite {
 
 	var $return_data;
-	
+	private $tag_prefix;
+    
 	public function Seo_lite() // backwards compatible __construct() won't work
-	{		
+	{
         $this->EE =& get_instance(); // Make a local reference to the ExpressionEngine super object
 
         $entry_id = $this->get_param('entry_id');
         $site_id = $this->get_param('site_id', $this->EE->config->item('site_id'));
 
         $use_last_segment = ($this->get_param('use_last_segment') == 'yes' || $this->get_param('use_last_segment') == 'y');
-        $tag_prefix = $this->get_param('tag_prefix');
+        $this->tag_prefix = $this->get_param('tag_prefix');
         $url_title = $this->get_param('url_title');
         $default_title = $this->get_param('default_title');    // override default title
         $default_keywords = $this->get_param('default_keywords');
@@ -53,9 +54,9 @@ class Seo_lite {
                 $seolite_entry = $q->row();
 
                 $vars = array(
-                    $tag_prefix.'title' => htmlspecialchars($this->get_preferred_value($seolite_entry->cat_name, $default_title), ENT_QUOTES), // use SEO title over original if it exists, then original, then default_title from parameter
-                    $tag_prefix.'meta_keywords' => htmlspecialchars($this->get_preferred_value($seolite_entry->default_keywords, $default_keywords), ENT_QUOTES),
-                    $tag_prefix.'meta_description' => htmlspecialchars($this->get_preferred_value($seolite_entry->cat_description, $seolite_entry->default_description, $default_description), ENT_QUOTES),
+                    $this->tag_prefix.'title' => htmlspecialchars($this->get_preferred_value($seolite_entry->cat_name, $default_title), ENT_QUOTES), // use SEO title over original if it exists, then original, then default_title from parameter
+                    $this->tag_prefix.'meta_keywords' => htmlspecialchars($this->get_preferred_value($seolite_entry->default_keywords, $default_keywords), ENT_QUOTES),
+                    $this->tag_prefix.'meta_description' => htmlspecialchars($this->get_preferred_value($seolite_entry->cat_description, $seolite_entry->default_description, $default_description), ENT_QUOTES),
                 );
 
                 $got_values = TRUE;
@@ -84,32 +85,81 @@ class Seo_lite {
                 }
             }
 
-            $this->EE->db->select('channel_titles.entry_id, channel_titles.title as original_title, url_title, seolite_content.title as seo_title, default_keywords, default_description, default_title_postfix, keywords, description, seolite_config.template');
-            $this->EE->db->from('channel_titles');
-            $where = array('channel_titles.site_id' => $site_id);
+            $select_str = 't.entry_id, t.title as original_title, url_title, seolite_content.title as seo_title, default_keywords, default_description, default_title_postfix, keywords, description, seolite_config.template';
+            if($this->EE->config->item('seolite_extra')) {
+                $select_str .= ',d.*';
+                $this->EE->db->select($select_str);
+                $this->EE->db->from('channel_titles t, channel_data d');
+                $this->EE->db->where('t.entry_id', 'd.entry_id', FALSE);
+            } else {
+                $this->EE->db->select($select_str);
+                $this->EE->db->from('channel_titles t');
+                $where = array('t.site_id' => $site_id);
+            }
+
+            $where = array('t.site_id' => $site_id);
             if($url_title)
             {
                 $where['url_title'] = $url_title;
             }
             else
             {
-                $where['channel_titles.entry_id'] = $entry_id;
+                $where['t.entry_id'] = $entry_id;
             }
             $this->EE->db->where($where);
-            $this->EE->db->join('seolite_config', 'seolite_config.site_id = channel_titles.site_id');
-            $this->EE->db->join('seolite_content', 'seolite_content.entry_id = channel_titles.entry_id', 'left');
+            $this->EE->db->join('seolite_config', 'seolite_config.site_id = t.site_id');
+            $this->EE->db->join('seolite_content', 'seolite_content.entry_id = t.entry_id', 'left');
 
             $q = $this->EE->db->get();
 
             if($q->num_rows() > 0)
             {
                 $seolite_entry = $q->row();
+                $tagdata = $this->get_tagdata($seolite_entry->template);
 
                 $vars = array(
-                    $tag_prefix.'title' => htmlspecialchars($this->get_preferred_value($seolite_entry->seo_title, $seolite_entry->original_title, $default_title), ENT_QUOTES), // use SEO title over original if it exists, then original, then default_title from parameter
-                    $tag_prefix.'meta_keywords' => htmlspecialchars($this->get_preferred_value($seolite_entry->keywords, $seolite_entry->default_keywords, $default_keywords), ENT_QUOTES),
-                    $tag_prefix.'meta_description' => htmlspecialchars($this->get_preferred_value($seolite_entry->description, $seolite_entry->default_description, $default_description), ENT_QUOTES),
+                    $this->tag_prefix.'title' => htmlspecialchars($this->get_preferred_value($seolite_entry->seo_title, $seolite_entry->original_title, $default_title), ENT_QUOTES), // use SEO title over original if it exists, then original, then default_title from parameter
+                    $this->tag_prefix.'meta_keywords' => htmlspecialchars($this->get_preferred_value($seolite_entry->keywords, $seolite_entry->default_keywords, $default_keywords), ENT_QUOTES),
+                    $this->tag_prefix.'meta_description' => htmlspecialchars($this->get_preferred_value($seolite_entry->description, $seolite_entry->default_description, $default_description), ENT_QUOTES),
                 );
+
+                if($this->EE->config->item('seolite_extra')) {
+                    $seolite_extra_config = $this->EE->config->item('seolite_extra');
+                    $channel_id = $q->row('channel_id');
+
+                    if($channel_id && isset($seolite_extra_config[$channel_id])) {
+
+                        foreach($seolite_extra_config[$channel_id] as $extra_field_name => $field_info) {
+                            $field_value = $q->row('field_id_'.$field_info['field_id']);
+
+                            if(isset($field_info['field_type'])) {
+                                switch($field_info['field_type']) {
+                                    case 'text':
+                                        $field_value = trim(strip_tags($field_value));
+                                        break;
+                                    case 'file':
+
+                                        /**
+                                         * If string contains a {filedir_x} reference we replace it with the correct url
+                                         */
+                                        if (preg_match('/^{filedir_(\d+)}/', $field_value, $matches))
+                                        {
+                                            $filedir_id = $matches[1];
+                                            $this->EE->load->model('file_upload_preferences_model');
+                                            $upload_dest_info = $this->EE->file_upload_preferences_model->get_file_upload_preferences(FALSE, $filedir_id);
+                                            $field_value = str_replace('{filedir_'.$filedir_id.'}', $upload_dest_info['url'], $field_value);
+                                        }
+                                        break;
+                                }
+
+                            }
+                            $vars[$this->tag_prefix.'extra:'.$extra_field_name] = $field_value;
+                        }
+                    } else {
+                        $tagdata = $this->clearExtraTags($tagdata);// extra array specified but no {extra} values for this channel so clear out those
+                    }
+                }
+
                 $got_values = TRUE;
             }
         }
@@ -119,28 +169,29 @@ class Seo_lite {
             // no specific entry lookup, but we still want the config
             $q = $this->EE->db->get_where('seolite_config', array('seolite_config.site_id' => $site_id));
             $seolite_entry = $q->row();
+            $tagdata = $this->get_tagdata($seolite_entry->template);
+            $tagdata = $this->clearExtraTags($tagdata);
 
             $vars = array(
-                $tag_prefix.'title' => htmlspecialchars($default_title, ENT_QUOTES),
-                $tag_prefix.'meta_keywords' => htmlspecialchars($this->get_preferred_value($default_keywords ,$seolite_entry->default_keywords), ENT_QUOTES) ,
-                $tag_prefix.'meta_description' => htmlspecialchars($this->get_preferred_value($default_description, $seolite_entry->default_description), ENT_QUOTES),
+                $this->tag_prefix.'title' => htmlspecialchars($default_title, ENT_QUOTES),
+                $this->tag_prefix.'meta_keywords' => htmlspecialchars($this->get_preferred_value($default_keywords ,$seolite_entry->default_keywords), ENT_QUOTES) ,
+                $this->tag_prefix.'meta_description' => htmlspecialchars($this->get_preferred_value($default_description, $seolite_entry->default_description), ENT_QUOTES),
             );
         }
 
-        if($vars[$tag_prefix.'title'] != '')
+        if($vars[$this->tag_prefix.'title'] != '')
         {
-            $title_postfix .= str_replace('&nbsp;',' ',$seolite_entry->default_title_postfix);
+            $title_postfix .= str_replace("&nbsp;"," ",$seolite_entry->default_title_postfix);
         }
 
-        $vars[$tag_prefix.'entry_title'] = $vars[$tag_prefix.'title'];
-        $vars[$tag_prefix.'title'] = $title_prefix.$vars[$tag_prefix.'title'].$title_postfix.($title_separator?' '.$title_separator.' ':'');
-        $vars[$tag_prefix.'canonical_url'] = $canonical_url;
+        $vars[$this->tag_prefix.'entry_title'] = $vars[$this->tag_prefix.'title'];
+        $vars[$this->tag_prefix.'title'] = $title_prefix.$vars[$this->tag_prefix.'title'].$title_postfix.($title_separator?' '.$title_separator.' ':'');
+        $vars[$this->tag_prefix.'canonical_url'] = $canonical_url;
 
-        $tagdata = $this->EE->TMPL->tagdata;
-        if( empty($tagdata))
-        {
-           $tagdata = $seolite_entry->template;
-        }
+        // special case for soft-hypen - we strip it entirely, if we were to use html_entity_decode
+        // on it as well it would display in the browser title
+        $vars[$this->tag_prefix.'title'] = str_replace("&amp;shy;", "", $vars[$this->tag_prefix.'title']);
+        $vars[$this->tag_prefix.'title'] = html_entity_decode($vars[$this->tag_prefix.'title']);
 
         // segment variables are not parsed yet, so we do it ourselves if they are in use in the seo lite template
         if(preg_match_all('/\{segment_(\d)\}/i', $tagdata, $matches))
@@ -167,6 +218,33 @@ class Seo_lite {
         $this->return_data = $this->EE->TMPL->parse_variables_row($tagdata, $vars);
         return $this->return_data;
 	}
+
+    /**
+     * Will clear all {extra:blabla} tags from the tagdata
+     *
+     * @param $tagdata
+     */
+    private function clearExtraTags($tagdata)
+    {
+        return preg_replace("~\{".$this->tag_prefix."extra:[^\}]*\}~",'', $tagdata );
+    }
+    
+    /**
+     * This function will get the tagdata if SEO lite is used as a tag pair, or return back
+     * the template shipped to it
+     *
+     * @param $default_template default seo lite template
+     * @return html/tagdata
+     */
+    private function get_tagdata($default_template) {
+        $tagdata = $this->EE->TMPL->tagdata;
+        if( empty($tagdata))
+        {
+            $tagdata = $default_template;
+        }
+
+        return $tagdata;
+    }
 
 
     /**
