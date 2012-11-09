@@ -29,7 +29,19 @@ class Seo_lite_tab {
         $title = $keywords = $description = '';
         if($entry_id)
         {
-            $q = $this->EE->db->get_where('seolite_content', array('entry_id' => $entry_id));
+            $where = array(
+                 'entry_id' => $entry_id,
+                 'site_id' => $this->EE->config->item('site_id')
+             );
+
+            if (isset($this->EE->publisher_lib))
+            {
+                $where['publisher_lang_id'] = $this->EE->publisher_lib->lang_id;
+                $where['publisher_status']  = $this->EE->publisher_lib->status;
+            }
+
+            $q = $this->EE->db->get_where('seolite_content', $where);
+
             if($q->num_rows())
             {
                 $title = $q->row('title');
@@ -115,11 +127,25 @@ class Seo_lite_tab {
             'description' => $seo_lite_data['seo_lite_description'],
         );
 
-        $q = $this->EE->db->get_where('seolite_content', array('site_id' => $site_id, 'entry_id' => $entry_id));
+        $where = array(
+             'entry_id' => $entry_id,
+             'site_id' => $site_id
+        );
+
+        if (isset($this->EE->publisher_lib))
+        {
+            $content['publisher_lang_id'] = $this->EE->publisher_lib->lang_id;
+            $content['publisher_status']  = $this->EE->publisher_lib->status;
+
+            $where['publisher_lang_id'] = $this->EE->publisher_lib->lang_id;
+            $where['publisher_status']  = $this->EE->publisher_lib->status;
+        }
+
+        $q = $this->EE->db->get_where('seolite_content', $where);
+
         if($q->num_rows())
         {
-            $this->EE->db->where('entry_id', $entry_id);
-            $this->EE->db->where('site_id', $site_id);
+            $this->EE->db->where($where);
             $this->EE->db->update('seolite_content', $content);
         }
         else

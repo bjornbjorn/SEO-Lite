@@ -13,7 +13,7 @@
  */
 class Seo_lite_upd {
 		
-	var $version        = '1.3.6';
+	var $version        = '1.4';
 	var $module_name = "Seo_lite";
 
     /**
@@ -154,6 +154,18 @@ class Seo_lite_upd {
         return $tabs;
     }
 
+    /**
+     * This will make SEO Lite compatible with Publisher (courtesy of Brian Litzinger)
+     */
+    function publisher_install()
+    {
+        if($this->EE->db->table_exists('seolite_content') AND !$this->EE->db->field_exists('publisher_lang_id', 'seolite_content'))
+        {
+         $this->EE->db->query("ALTER TABLE `{$this->EE->db->dbprefix}seolite_content` ADD `publisher_status` text NULL AFTER `entry_id`");
+         $this->EE->db->query("ALTER TABLE `{$this->EE->db->dbprefix}seolite_content` ADD `publisher_lang_id` text NULL AFTER `publisher_status`");
+        }
+    }
+
 	
 	/**
 	 * Uninstall the Seo_lite module
@@ -194,11 +206,21 @@ class Seo_lite_upd {
 	 */
     function update($current = '')
     {
+        /**
+         * Do this before the version check so that people can install Publisher and then run
+         * module updates to activate the feature for SEO Lite
+         */
+        if (isset($this->EE->publisher_lib))
+        {
+            $this->publisher_install();
+        }
+
+
         if ($current == $this->version)
         {
             return FALSE;
         }
-
+        
         if ($current < '1.2')
         {
             $this->EE->load->dbforge();
@@ -230,7 +252,7 @@ class Seo_lite_upd {
                     'default_keywords' => str_replace('&nbsp;', ' ', htmlspecialchars_decode($config->default_keywords, ENT_QUOTES)),
                     'default_title_postfix' => str_replace('&nbsp;', ' ', htmlspecialchars_decode($config->default_title_postfix, ENT_QUOTES)),
                 );
-                
+
                 $this->EE->db->update('seolite_config', $upd_arr, array('seolite_config_id'=>$config->seolite_config_id));
             }
         }
@@ -242,8 +264,8 @@ class Seo_lite_upd {
 
         return TRUE;
     }
-    
+
 }
 
-/* End of file upd.seo_lite.php */ 
-/* Location: ./system/expressionengine/third_party/seo_lite/upd.seo_lite.php */ 
+/* End of file upd.seo_lite.php */
+/* Location: ./system/expressionengine/third_party/seo_lite/upd.seo_lite.php */
