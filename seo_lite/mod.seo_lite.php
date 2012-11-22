@@ -52,7 +52,8 @@ class Seo_lite {
             if($q->num_rows() > 0)
             {
                 $seolite_entry = $q->row();
-
+                $tagdata = $this->get_tagdata($seolite_entry->template);
+                $tagdata = $this->clearExtraTags($tagdata); // no {extra} values for categories for now ..
                 $vars = array(
                     $this->tag_prefix.'title' => htmlspecialchars($this->get_preferred_value($seolite_entry->cat_name, $default_title), ENT_QUOTES), // use SEO title over original if it exists, then original, then default_title from parameter
                     $this->tag_prefix.'meta_keywords' => htmlspecialchars($this->get_preferred_value($seolite_entry->default_keywords, $default_keywords), ENT_QUOTES),
@@ -94,7 +95,6 @@ class Seo_lite {
             } else {
                 $this->EE->db->select($select_str);
                 $this->EE->db->from('channel_titles t');
-                $where = array('t.site_id' => $site_id);
             }
 
             $where = array('t.site_id' => $site_id);
