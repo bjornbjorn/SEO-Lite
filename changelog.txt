@@ -2,6 +2,7 @@ Changelog for SEOLite
 =====================
 The dates in this changelog use international date format: YYYY-MM-DD (ISO8601)
 
+* Added support for hiding the keywords field (use $config['seolite_show_keywords_field'] = 'n'; in config/seolite.php. This can also be overridden in a master config if you use that)
 * Support for Publisher
 * Bugfix: if the client used soft-hypen tag in the title (&shy;) it would display in the browser title as the tag
 * Made {entry_title} available as a tag (no title prefix/postfix etc.)
