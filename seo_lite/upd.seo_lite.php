@@ -13,7 +13,7 @@
  */
 class Seo_lite_upd {
 		
-	var $version        = '1.4.1';
+	var $version        = '1.4.2';
 	var $module_name = "Seo_lite";
 
     /**
@@ -79,6 +79,38 @@ class Seo_lite_upd {
         $this->EE->dbforge->add_field($seolite_content_fields);
         $this->EE->dbforge->add_key('seolite_content_id', TRUE);
         $this->EE->dbforge->create_table('seolite_content');
+        
+        $seolite_static_fields = array(
+            'seolite_static_id' => array(
+                'type' => 'int',
+                'constraint' => '10',
+                'unsigned' => TRUE,
+                'auto_increment' => TRUE,),
+            'site_id' => array(
+                'type' => 'int',
+                'constraint' => '10',
+                'null' => FALSE,),
+            'static_url' => array(
+                'type' => 'varchar',
+                'constraint' => '255',
+                'null' => FALSE,),
+            'title' => array(
+                'type' => 'varchar',
+                'constraint' => '1024',
+            ),            
+            'keywords' => array(
+                'type' => 'varchar',
+                'constraint' => '1024',
+                'null' => FALSE),
+            'description' => array(
+                'type' => 'text',),
+        );
+        
+        $this->EE->dbforge->add_field($seolite_static_fields);
+        $this->EE->dbforge->add_key('seolite_static_id', TRUE);
+        $this->EE->dbforge->create_table('seolite_static');
+        
+        
 
         $seolite_config_fields = array(
             'seolite_config_id' => array(
@@ -190,6 +222,7 @@ class Seo_lite_upd {
 		$this->EE->db->delete('actions');
 
         $this->EE->dbforge->drop_table('seolite_content');
+        $this->EE->dbforge->drop_table('seolite_static');
         $this->EE->dbforge->drop_table('seolite_config');
 
         $this->EE->load->library('layout');
@@ -260,6 +293,41 @@ class Seo_lite_upd {
         if($current < '1.3.5') {
             $sql = "ALTER TABLE `".$this->EE->db->dbprefix('seolite_config')."` CHANGE `default_keywords` `default_keywords` VARCHAR( 1024 ), CHANGE `default_description` `default_description` VARCHAR( 1024 )";
             $this->EE->db->query($sql);
+        }
+        
+        if($current < '1.4.2') {
+			// Add a table to support static URI part
+			$this->EE->load->dbforge();
+
+	        $seolite_static_fields = array(
+	            'seolite_static_id' => array(
+	                'type' => 'int',
+	                'constraint' => '10',
+	                'unsigned' => TRUE,
+	                'auto_increment' => TRUE,),
+	            'site_id' => array(
+	                'type' => 'int',
+	                'constraint' => '10',
+	                'null' => FALSE,),
+	            'static_url' => array(
+	                'type' => 'varchar',
+	                'constraint' => '255',
+	                'null' => FALSE,),
+	            'title' => array(
+	                'type' => 'varchar',
+	                'constraint' => '1024',
+	            ),            
+	            'keywords' => array(
+	                'type' => 'varchar',
+	                'constraint' => '1024',
+	                'null' => FALSE),
+	            'description' => array(
+	                'type' => 'text',),
+	        );
+	        
+	        $this->EE->dbforge->add_field($seolite_static_fields);
+	        $this->EE->dbforge->add_key('seolite_static_id', TRUE);
+	        $this->EE->dbforge->create_table('seolite_static');	                	
         }
 
         return TRUE;

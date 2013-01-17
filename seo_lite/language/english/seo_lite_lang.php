@@ -20,3 +20,5 @@ $lang['default_title_postfix_description'] = "Whatever you specify here will be 
 
 $lang['docs'] = 'Documentation';
 $lang['settings'] = 'Settings';
+$lang['static'] = 'Static';
+$lang['uri'] = 'URI';
