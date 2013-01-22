@@ -22,7 +22,7 @@ class Seo_lite_tab {
         }
 
         $tab_title = $this->EE->config->item('seolite_tab_title') ? $this->EE->config->item('seolite_tab_title') : $this->EE->config->item('seo_lite_tab_title');   // config item was renamed but we support the old seo_lite_tab_title as well
-        if($$tab_title) {
+        if($tab_title) {
             $this->EE->lang->language['seo_lite'] = $tab_title;
         }
     }
