@@ -131,7 +131,7 @@ class Seo_lite_tab {
             'site_id' => $site_id,
             'entry_id' => $entry_id,
             'title' => $seo_lite_data['seo_lite_title'],
-            'keywords' => $seo_lite_data['seo_lite_keywords'] ? $seo_lite_data['seo_lite_keywords'] : '',
+            'keywords' => isset($seo_lite_data['seo_lite_keywords']) ? $seo_lite_data['seo_lite_keywords'] : '',
             'description' => $seo_lite_data['seo_lite_description'],
         );
 
