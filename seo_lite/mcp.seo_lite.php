@@ -89,10 +89,16 @@ class Seo_lite_mcp
 		
 		foreach( $urls as $key => $value)
 		{
+			
+			$static_url = rtrim($value, "/");
+			if( empty($static_url) )
+			{
+				$static_url = "/";
+			}
 
 			$data_arr = array(
 				'site_id' => $site_id,
-				'static_url' => rtrim($value, "/"),
+				'static_url' => $static_url,
 				'title' => $titles[$key],
 				'keywords' => $keywords[$key],
 				'description' => $descriptions[$key],					

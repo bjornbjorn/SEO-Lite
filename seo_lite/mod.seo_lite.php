@@ -181,8 +181,12 @@ class Seo_lite {
         }
         
         if( $ignore_static != "yes" )
-        {
+        {        	
         	$uri = rtrim($this->get_request_uri(), "/");
+        	if( empty($uri) )
+        	{        		
+        		$uri = "/";        		
+        	}
 			$q = $this->EE->db->select('seolite_static.*, seolite_config.template, seolite_config.default_title_postfix')->from('seolite_static')->where('seolite_static.site_id', $site_id)->where('seolite_static.static_url', $uri)->limit(1)->join('seolite_config', 'seolite_config.site_id = seolite_static.site_id')->get();
 			if( $q->num_rows() > 0 )
 			{
