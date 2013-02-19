@@ -2,6 +2,9 @@ Changelog for SEOLite
 =====================
 The dates in this changelog use international date format: YYYY-MM-DD (ISO8601)
 
+1.4.2 - 2013-02-19
+------------------
+* Bugfix for using SEO Lite as a tag pair inside an exp:channel:entries loop - use {exp:seo_lite:pair} now - ie. {exp:seo_lite:pair entry_id="{entry_id]"} Meta: {meta_description}{/exp:seo_lite:pair}
 * Added support for hiding the keywords field (use $config['seolite_show_keywords_field'] = 'n'; in config/seolite.php. This can also be overridden in a master config if you use that)
 * Support for Publisher
 * Bugfix: if the client used soft-hypen tag in the title (&shy;) it would display in the browser title as the tag

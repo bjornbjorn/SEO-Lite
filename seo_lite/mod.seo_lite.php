@@ -16,6 +16,25 @@ class Seo_lite {
     
 	public function Seo_lite() // backwards compatible __construct() won't work
 	{
+        return $this->perform();
+	}
+
+    /**
+     * When using SEO Lite as a tag pair, e.g.:
+     *
+     * {exp:seo_lite:pair entry_id="{entry_id}"}
+     *      <h3>Meta description for entry_id={entry_id}:</h3>
+     *      {meta_description}
+     * {/exp:seo_lite:pair}
+     *
+     */
+    public function pair()
+    {
+        return $this->perform();
+    }
+
+    private function perform()
+    {
         $this->EE =& get_instance(); // Make a local reference to the ExpressionEngine super object
 
         $entry_id = $this->get_param('entry_id');
@@ -165,7 +184,7 @@ class Seo_lite {
         }
 
         if(!$got_values)
-        {           
+        {
             // no specific entry lookup, but we still want the config
             $q = $this->EE->db->get_where('seolite_config', array('seolite_config.site_id' => $site_id));
             $seolite_entry = $q->row();
@@ -212,12 +231,12 @@ class Seo_lite {
          */
         if($title_override)
         {
-            $tagdata = preg_replace("~<title>([^<]*)</title>~",'<title>'.$title_override.'</title>', $tagdata ); 
+            $tagdata = preg_replace("~<title>([^<]*)</title>~",'<title>'.$title_override.'</title>', $tagdata );
         }
 
         $this->return_data = $this->EE->TMPL->parse_variables_row($tagdata, $vars);
         return $this->return_data;
-	}
+    }
 
     /**
      * Will clear all {extra:blabla} tags from the tagdata
