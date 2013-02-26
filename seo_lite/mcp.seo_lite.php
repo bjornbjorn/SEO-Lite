@@ -25,6 +25,7 @@ class Seo_lite_mcp
         // uncomment this if you want navigation buttons at the top
 		$this->EE->cp->set_right_nav(array(
 				'settings'			=> $this->base,
+				'static'			=> $this->base.AMP.'method=statics',
 				'docs'	=> 'http://ee.bybjorn.com/seo_lite',
 			));
 
@@ -54,6 +55,73 @@ class Seo_lite_mcp
         $vars['default_title_postfix'] = $config->row('default_title_postfix');
 
 		return $this->content_wrapper('index', 'seo_lite_welcome', $vars);
+	}
+	
+	
+	function statics() 
+	{
+		$vars = array();
+
+        $site_id = $this->EE->config->item('site_id');
+        $statics = $this->EE->db->get_where('seolite_static', array('site_id' => $site_id));
+
+		$vars['statics'] = $statics;
+		/*
+		$vars['template'] = $config->row('template');
+        $vars['default_description'] = $config->row('default_description');
+        $vars['default_keywords'] = $config->row('default_keywords');
+        $vars['default_title_postfix'] = $config->row('default_title_postfix');
+		*/
+		return $this->content_wrapper('static', 'seo_lite_welcome', $vars);
+	}	
+	
+	function save_statics()
+	{
+		$site_id = $this->EE->config->item('site_id');
+		$urls = $this->EE->input->post('seolite_static_url');
+		$titles = $this->EE->input->post('seolite_static_title');
+		$keywords = $this->EE->input->post('seolite_static_keywords');
+		$descriptions = $this->EE->input->post('seolite_static_description');
+		if( count($urls) == 0 )
+		{
+			show_error('No input specified');
+		}
+		
+		foreach( $urls as $key => $value)
+		{
+			
+			$static_url = rtrim($value, "/");
+			if( empty($static_url) )
+			{
+				$static_url = "/";
+			}
+
+			$data_arr = array(
+				'site_id' => $site_id,
+				'static_url' => $static_url,
+				'title' => $titles[$key],
+				'keywords' => $keywords[$key],
+				'description' => $descriptions[$key],					
+			);
+
+		
+			if( $key == "new" && $value != "")
+			{				
+				$this->EE->db->insert('seolite_static', $data_arr);								
+			}
+			else
+			{
+				if( $value == "" )
+				{
+					$this->EE->db->where('seolite_static_id', $key)->limit(1)->delete('seolite_static');
+					continue;
+				}
+				
+				$this->EE->db->where('seolite_static_id', $key)->limit(1)->update('seolite_static', $data_arr);												
+			}
+			
+		}				
+		$this->EE->functions->redirect($this->base.AMP.'method=statics');
 	}
 	
 	function save_settings()
