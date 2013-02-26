@@ -53,6 +53,7 @@ class Seo_lite {
         $friendly_segments = ($this->get_param('friendly_segments') == 'yes' || $this->get_param('friendly_segments') == 'y');
         $ignore_last_segments = $this->get_param('ignore_last_segments', FALSE);
         $category_url_title = $this->get_param('category_url_title');
+        $ignore_static = $this->get_param('ignore_static', 'no');        
 
         $canonical_url = $this->get_param('canonical',$this->get_canonical_url($ignore_last_segments));
 
@@ -197,6 +198,28 @@ class Seo_lite {
                 $this->tag_prefix.'meta_description' => htmlspecialchars($this->get_preferred_value($default_description, $seolite_entry->default_description), ENT_QUOTES),
             );
         }
+        
+        if( $ignore_static != "yes" )
+        {        	
+        	$uri = rtrim($this->get_request_uri(), "/");
+        	if( empty($uri) )
+        	{        		
+        		$uri = "/";        		
+        	}
+			$q = $this->EE->db->select('seolite_static.*, seolite_config.template, seolite_config.default_title_postfix')->from('seolite_static')->where('seolite_static.site_id', $site_id)->where('seolite_static.static_url', $uri)->limit(1)->join('seolite_config', 'seolite_config.site_id = seolite_static.site_id')->get();
+			if( $q->num_rows() > 0 )
+			{
+				$seolite_static_entry = $q->row();
+				$tagdata = $this->get_tagdata($seolite_static_entry->template);
+				$tagdata = $this->clearExtraTags($tagdata);
+				
+	            $vars = array(
+	                $this->tag_prefix.'title' => htmlspecialchars($seolite_static_entry->title, ENT_QUOTES),
+	                $this->tag_prefix.'meta_keywords' => htmlspecialchars($seolite_static_entry->keywords, ENT_QUOTES),
+	                $this->tag_prefix.'meta_description' => htmlspecialchars($seolite_static_entry->description, ENT_QUOTES),
+	            );
+			}			        	        	        	        	
+        }          
 
         if($vars[$this->tag_prefix.'title'] != '')
         {
