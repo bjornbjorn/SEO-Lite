@@ -2,8 +2,7 @@
 
 h3. SEO Lite links
 
-* "SEO Lite product page":http://www.addonbakery.com/expressionengine-addons/seolite.html
-* "SEO Lite - Full Documentation":http://www.addonbakery.com/docs/expressionengine/SEO_Lite_-_Installation_Usage.html
-* "SEO Lite Changelog":http://www.addonbakery.com/docs/expressionengine/SEO_Lite_-_Installation_Usage.html#changelog
+* "SEO Lite product page":http://wedoaddons.com/addon/seo-lite
+* "SEO Lite - Full Documentation":http://wedoaddons.com/addon/seo-lite/documentation
 
-See our list of "ExpressionEngine Addons here":http://www.addonbakery.com/expressionengine-addons.html
+See our list of "ExpressionEngine Addons here":http://wedoaddons.com/addons
