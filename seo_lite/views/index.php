@@ -80,6 +80,13 @@
             )
         );
 
+        $this->table->add_row(array(
+                lang('default_extra', 'seolite_default_extra'),
+                form_error('seolite_default_extra').
+                form_textarea('seolite_default_extra', set_value('seolite_default_extra', $default_extra), 'id="seolite_default_extra"')
+            )
+        );
+
 
         $this->table->add_row(array(
             lang('default_title_postfix', 'seolite_default_title_postfix'),

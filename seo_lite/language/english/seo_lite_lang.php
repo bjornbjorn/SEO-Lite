@@ -14,6 +14,7 @@ $lang['seokeywords'] = 'SEO Meta Keywords';
 $lang['keywords_instructions'] = 'A comma separated list of keywords';
 $lang['seodescription'] = 'SEO Meta Description';
 $lang['description_instructions'] = 'Write a short sentence or two that sums up the entry (many search engines will display this in the search results)';
+$lang['default_extra'] = 'Default extra meta tags for this entry';
 $lang['seoextra'] = 'Any extra meta tags for this entry';
 $lang['extra_instructions'] = 'Anything in this field will be inserted into the header. ex.&lt;meta name=&quot;...&quot; content=&quot;...&quot; /&gt;';
 $lang['default_title_postfix'] = 'Default title postfix';

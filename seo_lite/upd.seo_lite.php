@@ -104,6 +104,9 @@ class Seo_lite_upd {
                 'type' => 'varchar',
                 'constraint' => '1024',
                 'null' => FALSE),
+            'default_extra' => array(
+                'type' => 'text',
+                'null' => TRUE),
 
             'default_title_postfix' => array(
                 'type' => 'varchar',
@@ -151,6 +154,12 @@ class Seo_lite_upd {
                 'collapse'	=> 'false',
                 'htmlbuttons'	=> 'false',
                 'width'		=> '100%',
+                ),
+            'seo_lite_extra' => array(
+                'visible'   => 'true',
+                'collapse'  => 'false',
+                'htmlbuttons'   => 'false',
+                'width'     => '100%',
                 ),            
             );
 
@@ -254,6 +263,14 @@ class Seo_lite_upd {
             );
             
             $this->EE->dbforge->add_column('seolite_content', $fields);
+
+            $fields = array(
+                'default_extra' => array(
+                    'type' => 'text',
+                ),
+            );
+            
+            $this->EE->dbforge->add_column('seolite_config', $fields);
             
         }
         
