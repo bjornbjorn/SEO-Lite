@@ -413,7 +413,11 @@ class Seo_lite {
 	private function get_param($key, $default_value = '')
 	{
 		$val = $this->EE->TMPL->fetch_param($key);
-		
+
+        // since EE will remove space at the beginning of a parameter people are using &nbsp; or &#32;
+        // we replace these with a standard space here
+        $val = str_replace(array('&nbsp;','&#32;'), array(' ',' '), $val);
+
 		if($val == '') {
 			return $default_value;
 		}

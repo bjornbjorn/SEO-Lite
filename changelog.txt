@@ -2,6 +2,10 @@ Changelog for SEOLite
 =====================
 The dates in this changelog use international date format: YYYY-MM-DD (ISO8601)
 
+1.4.3 - 2013-04-19
+------------------
+* Replace &nsbp; and &#32; in all tag parameters with normal whitespace (since EE will remove space at the beginning of a parameter people are using &nbsp; or &#32; - we replace these with a standard space)
+
 1.4.2 - 2013-02-19
 ------------------
 * Bugfix for using SEO Lite as a tag pair inside an exp:channel:entries loop - use {exp:seo_lite:pair} now - ie. {exp:seo_lite:pair entry_id="{entry_id]"} Meta: {meta_description}{/exp:seo_lite:pair}
