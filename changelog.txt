@@ -2,6 +2,10 @@ Changelog for SEOLite
 =====================
 The dates in this changelog use international date format: YYYY-MM-DD (ISO8601)
 
+1.4.4 - 2013-05-16
+------------------
+* Fixed use of function that was deprecated in EE 2.6.1
+
 1.4.3 - 2013-04-19
 ------------------
 * Replace &nsbp; and &#32; in all tag parameters with normal whitespace (since EE will remove space at the beginning of a parameter people are using &nbsp; or &#32; - we replace these with a standard space)

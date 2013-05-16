@@ -6,8 +6,8 @@
  * @package		Seo_lite
  * @subpackage	ThirdParty
  * @category	Modules
- * @author		bjorn
- * @link		http://ee.bybjorn.com/
+ * @author		Bjørn Børresen
+ * @link		http://wedoaddons.com/addons/seo-lite
  */
 class Seo_lite_mcp 
 {
@@ -94,9 +94,8 @@ class Seo_lite_mcp
 		$vars['content_view'] = $content_view;
 		$vars['_base'] = $this->base;
 		$vars['_form_base'] = $this->form_base;
-		$this->EE->cp->set_variable('cp_page_title', lang($lang_key));
+        $this->EE->view->cp_page_title = lang($lang_key);
 		$this->EE->cp->set_breadcrumb($this->base, lang('seo_lite_module_name'));
-
 		return $this->EE->load->view('_wrapper', $vars, TRUE);
 	}
 	
