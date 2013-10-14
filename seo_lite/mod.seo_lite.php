@@ -156,6 +156,23 @@ class Seo_lite {
                                     case 'text':
                                         $field_value = trim(strip_tags($field_value));
                                         break;
+                                    case 'assets':
+                                        $this->EE->db->select('filedir_id, file_name');
+                                        $this->EE->db->from('assets_files');
+                                        $this->EE->db->join('assets_selections', 'assets_selections.file_id = assets_files.file_id');
+                                        $this->EE->db->where('assets_selections.field_id', $field_info['field_id']);
+                                        $this->EE->db->where('assets_selections.sort_order', 0);
+                                        $q = $this->EE->db->get();
+
+                                        if($q->num_rows() === 0)
+                                        {
+                                            break;
+                                        }
+
+                                        $filedir_id = $q->row('filedir_id');
+                                        $file_name = $q->row('file_name');
+                                        $field_value = '{filedir_'.$filedir_id.'}'.$file_name;
+                                        // Fall through
                                     case 'file':
 
                                         /**
