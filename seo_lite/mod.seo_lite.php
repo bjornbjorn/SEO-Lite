@@ -157,21 +157,30 @@ class Seo_lite {
                                         $field_value = trim(strip_tags($field_value));
                                         break;
                                     case 'assets':
-                                        $this->EE->db->select('filedir_id, file_name');
-                                        $this->EE->db->from('assets_files');
-                                        $this->EE->db->join('assets_selections', 'assets_selections.file_id = assets_files.file_id');
-                                        $this->EE->db->where('assets_selections.field_id', $field_info['field_id']);
-                                        $this->EE->db->where('assets_selections.sort_order', 0);
-                                        $q = $this->EE->db->get();
 
-                                        if($q->num_rows() === 0)
-                                        {
-                                            break;
+                                        /**
+                                         * Older versions of Assets will store {filedir_1} etc. in the field_value field,
+                                         * if we have this we don't need to look up the assets selection so just fall back
+                                         * to regular file.
+                                         */
+                                        if(strpos($field_value, '{filedir_') === FALSE) {
+                                            $this->EE->db->select('filedir_id, file_name');
+                                            $this->EE->db->from('assets_files');
+                                            $this->EE->db->join('assets_selections', 'assets_selections.file_id = assets_files.file_id');
+                                            $this->EE->db->where('assets_selections.field_id', $field_info['field_id']);
+                                            $this->EE->db->where('assets_selections.entry_id', $entry_id);
+                                            $this->EE->db->where('assets_selections.sort_order', 0);
+                                            $q = $this->EE->db->get();
+
+                                            if($q->num_rows() === 0)
+                                            {
+                                                break;
+                                            }
+
+                                            $filedir_id = $q->row('filedir_id');
+                                            $file_name = $q->row('file_name');
+                                            $field_value = '{filedir_'.$filedir_id.'}'.$file_name;
                                         }
-
-                                        $filedir_id = $q->row('filedir_id');
-                                        $file_name = $q->row('file_name');
-                                        $field_value = '{filedir_'.$filedir_id.'}'.$file_name;
                                         // Fall through
                                     case 'file':
 
