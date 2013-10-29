@@ -164,12 +164,13 @@ class Seo_lite {
                                          * to regular file.
                                          */
                                         if(strpos($field_value, '{filedir_') === FALSE) {
-                                            $this->EE->db->select('filedir_id, file_name');
-                                            $this->EE->db->from('assets_files');
-                                            $this->EE->db->join('assets_selections', 'assets_selections.file_id = assets_files.file_id');
-                                            $this->EE->db->where('assets_selections.field_id', $field_info['field_id']);
-                                            $this->EE->db->where('assets_selections.entry_id', $entry_id);
-                                            $this->EE->db->where('assets_selections.sort_order', 0);
+                                            $this->EE->db->select('f.filedir_id, f.file_name, fo.full_path');
+                                            $this->EE->db->from('assets_files f');
+                                            $this->EE->db->join('assets_selections s', 's.file_id = f.file_id');
+                                            $this->EE->db->join('assets_folders fo', 'fo.folder_id = f.folder_id', 'LEFT');
+                                            $this->EE->db->where('s.field_id', $field_info['field_id']);
+                                            $this->EE->db->where('s.entry_id', $entry_id);
+                                            $this->EE->db->where('s.sort_order', 0);
                                             $q = $this->EE->db->get();
 
                                             if($q->num_rows() === 0)
@@ -179,7 +180,8 @@ class Seo_lite {
 
                                             $filedir_id = $q->row('filedir_id');
                                             $file_name = $q->row('file_name');
-                                            $field_value = '{filedir_'.$filedir_id.'}'.$file_name;
+                                            $assets_subfolder = $q->row('full_path');
+                                            $field_value = '{filedir_'.$filedir_id.'}'.$assets_subfolder.$file_name;
                                         }
                                         // Fall through
                                     case 'file':

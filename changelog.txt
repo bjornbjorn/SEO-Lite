@@ -2,7 +2,7 @@ Changelog for SEOLite
 =====================
 The dates in this changelog use international date format: YYYY-MM-DD (ISO8601)
 
-1.4.5 - 2013-10-29
+1.4.5.1 - 2013-10-29
 ------------------
 * Fixes issue with old/new versions of the SEO Lite Assets extra field.
 
