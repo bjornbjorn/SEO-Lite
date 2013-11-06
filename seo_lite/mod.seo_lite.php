@@ -263,6 +263,26 @@ class Seo_lite {
         }
 
         $this->return_data = $this->EE->TMPL->parse_variables_row($tagdata, $vars);
+
+        // -------------------------------------------
+        // Allows one to modify the returned SEO Lite header template
+        //
+        // Params sent in:
+        // - Parsed tagdata (the template)
+        // - The variable array ( [tag_prefix:title] etc.)
+        // - The tag prefix used (needed to look up the var array reliably, but is often empty)
+        // - A reference to the Seo_lite class (mod.seo_lite.php)
+        //
+        // The returned html will replace the data returned by the {exp:seo_lite} tag.
+        //
+        // Remember the last_call variable in case other add ons than yours use this hook: return $html.$this->EE->extensions->last_call;
+        // -------------------------------------------
+        if ($this->EE->extensions->active_hook('seo_lite_template') === TRUE)
+        {
+            $this->return_data = $this->EE->extensions->call('seo_lite_template', $this->return_data, $vars, $this->tag_prefix, $this);
+            if ($this->EE->extensions->end_script === TRUE) return;
+        }
+
         return $this->return_data;
     }
 
