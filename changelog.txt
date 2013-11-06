@@ -2,28 +2,33 @@ Changelog for SEOLite
 =====================
 The dates in this changelog use international date format: YYYY-MM-DD (ISO8601)
 
+1.4.6.1 - 2013-11-06
+--------------------
+* Added tag parameters array to the hook
+
+        // -------------------------------------------
+        // Allows one to modify the returned SEO Lite header template
+        //
+        // Params sent in:
+        // - Parsed tagdata (the template)
+        // - Array: The SEO Lite / Entry variables collected ( [tag_prefix:title] etc.)
+        // - The tag prefix used (needed to look up the var array reliably, but is often empty)
+        // - Array: The SEO Lite tag parameters used (any kind of params can be added to SEO Lite, even ones SEO Lite don't recognize)
+        // - A reference to the Seo_lite class (mod.seo_lite.php)
+        //
+        // The returned html will replace the data returned by the {exp:seo_lite} tag.
+        //
+        // Remember the last_call variable in case other add ons than yours use this hook: return $html.$this->EE->extensions->last_call;
+        // -------------------------------------------
+		
 1.4.6 - 2013-11-06
 ------------------
 * Added hook: "seo_lite_template" which will enable developers to modify the SEO Lite template before it is returned.
   This could be used similar to the CP's add_to_head hooks, if you'd like to add something to the headers globally from
   one of your addons.
   
-		// $this->return_data = ee()->extensions->call('seo_lite_template', $this->return_data, $vars, $this->tag_prefix, $this);
-  
-        // -------------------------------------------
-        // Allows one to modify the returned SEO Lite header template
-        //
-        // Params sent in:
-        // - Parsed tagdata (the template)
-        // - The variable array ( [tag_prefix:title] etc.)
-        // - The tag prefix used (needed to look up the var array reliably, but is often empty)
-        // - A reference to the Seo_lite class (mod.seo_lite.php)
-        //
-        // The returned html will replace the data returned by the {exp:seo_lite} tag.
-        // -------------------------------------------
-
 1.4.5.1 - 2013-10-29
-------------------
+--------------------
 * Fixes issue with old/new versions of the SEO Lite Assets extra field.
 
 

@@ -269,8 +269,9 @@ class Seo_lite {
         //
         // Params sent in:
         // - Parsed tagdata (the template)
-        // - The variable array ( [tag_prefix:title] etc.)
+        // - Array: The SEO Lite / Entry variables collected ( [tag_prefix:title] etc.)
         // - The tag prefix used (needed to look up the var array reliably, but is often empty)
+        // - Array: The SEO Lite tag parameters used (any kind of params can be added to SEO Lite, even ones SEO Lite don't recognize)
         // - A reference to the Seo_lite class (mod.seo_lite.php)
         //
         // The returned html will replace the data returned by the {exp:seo_lite} tag.
@@ -279,7 +280,7 @@ class Seo_lite {
         // -------------------------------------------
         if ($this->EE->extensions->active_hook('seo_lite_template') === TRUE)
         {
-            $this->return_data = $this->EE->extensions->call('seo_lite_template', $this->return_data, $vars, $this->tag_prefix, $this);
+            $this->return_data = $this->EE->extensions->call('seo_lite_template', $this->return_data, $vars, $this->tag_prefix, $this->EE->TMPL->tagparams, $this);
             if ($this->EE->extensions->end_script === TRUE) return;
         }
 
