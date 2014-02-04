@@ -382,8 +382,10 @@ class Seo_lite {
         {
             $segments = explode('/', $this->get_request_uri());
             $segment_count = count($segments);
-
             $append_to_url = FALSE;
+
+            /* Jason Siffring - commenting this out because it was resulting in urls with duplicate page numbers
+                e.g. view-source:http://site.com/post/category/marketing/P39/P39
 
             if($segment_count > 0)
             {
@@ -397,7 +399,8 @@ class Seo_lite {
                     }
                 }
             }
-
+            */
+            
             $canonical_url = '';
 
             // if we got a page_uri, we use that as the blueprint
@@ -425,7 +428,7 @@ class Seo_lite {
             $total_segments = count($segs);
             for($i=1; $i<$total_segments && $i < ($total_segments-$ignore_last_segments); $i++)
             {
-                $canonical_url_segments .= $segs[$i];
+                $canonical_url_segments .= $segs[$i] . '/'; // Jason Siffring - was missing a slash between segments
             }
 
             $canonical_url = $this->EE->functions->create_url($canonical_url_segments);
