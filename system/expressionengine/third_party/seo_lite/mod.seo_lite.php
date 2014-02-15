@@ -105,7 +105,40 @@ class Seo_lite {
                 }
             }
 
-            $select_str = 't.entry_id, t.title as original_title, url_title, seolite_content.title as seo_title, default_keywords, default_description, default_title_postfix, keywords, description, seolite_config.template';
+            $table_name = 'seolite_content';
+            $where = array('t.site_id' => $site_id);
+            if($url_title)
+            {
+                $where['url_title'] = $url_title;
+            }
+            else
+            {
+                $where['t.entry_id'] = $entry_id;
+            }
+            // -------------------------------------------
+            // Allows one to pull from another table
+            //
+            // Params sent in:
+            // - The table name
+            //
+            // Return data
+            //
+            // May be an array containing 'table_name' (new name of table to pull from)
+            // -------------------------------------------
+            if ($this->EE->extensions->active_hook('seo_lite_fetch_data') === TRUE)
+            {
+                $hook_result = $this->return_data = $this->EE->extensions->call('seo_lite_fetch_data', $where, $table_name);
+                if($hook_result && isset($hook_result['table_name'])) {
+                    $table_name = $hook_result['table_name'];
+                }
+                if($hook_result && isset($hook_result['where'])) {
+                    $where = $hook_result['where'];
+                }
+
+                if ($this->EE->extensions->end_script === TRUE) return;
+            }
+
+            $select_str = 't.entry_id, t.title as original_title, url_title, '.$table_name.'.title as seo_title, default_keywords, default_description, default_title_postfix, keywords, description, seolite_config.template';
             if($this->EE->config->item('seolite_extra')) {
                 $select_str .= ',d.*';
                 $this->EE->db->select($select_str);
@@ -116,18 +149,9 @@ class Seo_lite {
                 $this->EE->db->from('channel_titles t');
             }
 
-            $where = array('t.site_id' => $site_id);
-            if($url_title)
-            {
-                $where['url_title'] = $url_title;
-            }
-            else
-            {
-                $where['t.entry_id'] = $entry_id;
-            }
             $this->EE->db->where($where);
             $this->EE->db->join('seolite_config', 'seolite_config.site_id = t.site_id');
-            $this->EE->db->join('seolite_content', 'seolite_content.entry_id = t.entry_id', 'left');
+            $this->EE->db->join($table_name, $table_name.'.entry_id = t.entry_id', 'left');
 
             $q = $this->EE->db->get();
 

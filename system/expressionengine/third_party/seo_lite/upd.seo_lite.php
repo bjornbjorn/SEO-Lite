@@ -13,7 +13,7 @@
  */
 class Seo_lite_upd {
 		
-	var $version        = '1.4.6.1';
+	var $version        = '1.4.7';
 	var $module_name = "Seo_lite";
 
     /**
@@ -154,19 +154,7 @@ class Seo_lite_upd {
         return $tabs;
     }
 
-    /**
-     * This will make SEO Lite compatible with Publisher (courtesy of Brian Litzinger)
-     */
-    function publisher_install()
-    {
-        if($this->EE->db->table_exists('seolite_content') AND !$this->EE->db->field_exists('publisher_lang_id', 'seolite_content'))
-        {
-         $this->EE->db->query("ALTER TABLE `{$this->EE->db->dbprefix}seolite_content` ADD `publisher_status` text NULL AFTER `entry_id`");
-         $this->EE->db->query("ALTER TABLE `{$this->EE->db->dbprefix}seolite_content` ADD `publisher_lang_id` text NULL AFTER `publisher_status`");
-        }
-    }
 
-	
 	/**
 	 * Uninstall the Seo_lite module
 	 */
@@ -206,21 +194,116 @@ class Seo_lite_upd {
 	 */
     function update($current = '')
     {
-        /**
-         * Do this before the version check so that people can install Publisher and then run
-         * module updates to activate the feature for SEO Lite
-         */
-        if (isset($this->EE->publisher_lib))
-        {
-            $this->publisher_install();
-        }
-
-
         if ($current == $this->version)
         {
             return FALSE;
         }
-        
+
+        /**
+         * 1.4.6 of SEO Lite had support for Publisher but it was tightly coupled. If the user has made use of this
+         * functionality we clean up here and move the data over to it's own table.
+         */
+        if($current < '1.4.7') {
+
+            // first, check if user has made use of Publisher functionality
+            if($this->EE->db->table_exists('seolite_content') AND $this->EE->db->field_exists('publisher_lang_id', 'seolite_content'))
+            {
+
+                // check if the Publisher SEO Lite table already exists, if so don't create it.
+                if(!$this->EE->db->table_exists('publisher_seolite_content')) {
+
+                    // 1. Create new table for Publisher translated versions of SEO Lite
+                    $this->EE->load->dbforge();
+
+                    $publisher_seolite_content_fields = array(
+                        'publisher_seolite_content_id' => array(
+                            'type' => 'int',
+                            'constraint' => '10',
+                            'unsigned' => TRUE,
+                            'auto_increment' => TRUE,),
+                        'site_id' => array(
+                            'type' => 'int',
+                            'constraint' => '10',
+                            'null' => FALSE,),
+                        'entry_id' => array(
+                            'type' => 'int',
+                            'constraint' => '10',
+                            'null' => FALSE,),
+                        'title' => array(
+                            'type' => 'varchar',
+                            'constraint' => '1024',
+                            'null' => FALSE,),
+                        'keywords' => array(
+                            'type' => 'varchar',
+                            'constraint' => '1024',
+                            'null' => FALSE,),
+                        'description' => array(
+                            'type' => 'text',),
+                        'publisher_status' => array(
+                            'type' => 'text',),
+                        'publisher_lang_id' => array(
+                            'type' => 'int',
+                            'constraint' => '10',
+                            'null' => FALSE,),
+                    );
+
+                    $this->EE->dbforge->add_field($publisher_seolite_content_fields);
+                    $this->EE->dbforge->add_key('publisher_seolite_content_id', TRUE);
+                    $this->EE->dbforge->create_table('publisher_seolite_content');
+                }
+
+                // 2. go through existing SEO Lite content, and copy over.
+
+                $q = $this->EE->db->get('seolite_content');
+                foreach($q->result() as $seolite_content) {
+                    $this->EE->db->insert('publisher_seolite_content',
+                        array(
+                            'site_id'           => $seolite_content->site_id,
+                            'entry_id'          => $seolite_content->entry_id,
+                            'title'             => $seolite_content->title,
+                            'keywords'          => $seolite_content->keywords,
+                            'description'       => $seolite_content->description,
+                            'publisher_status'  => $seolite_content->publisher_status,
+                            'publisher_lang_id' => $seolite_content->publisher_lang_id,
+                        )
+                    );
+                }
+
+                // 3. delete all publisher content from the SEO Lite table w/publisher_lang_id > 1
+                $this->EE->db->where('publisher_lang_id > ', 1)->delete('seolite_content');
+
+                // 4. cleanup - remove publisher columns from SEO Lite table
+                $this->EE->dbforge->drop_column('seolite_content', 'publisher_status');
+                $this->EE->dbforge->drop_column('seolite_content', 'publisher_lang_id');
+
+
+                // 5. Add hooks for publisher if they have not been installed
+
+                $hq = $this->EE->db->get_where('extensions', array('class' => 'Publisher_ext', 'method' => 'seo_lite_tab_content'));
+                if($hq->num_rows() == 0) {
+
+                    $hooks = array(
+                        'seo_lite_tab_content', 'seo_lite_tab_content_save', 'seo_lite_fetch_data'
+                    );
+
+                    foreach($hooks as $hook) {
+                        $this->EE->db->insert('extensions', array(
+                            'class' => 'Publisher_ext',
+                            'hook' => $hook,
+                            'method' => $hook,
+                            'priority' => '10',
+                            'settings' => '',
+                            'version' => '1.1.4',
+                            'enabled' => 'y',
+                        ));
+                    }
+
+                }
+
+                // Voilà - SEO Lite & Publisher totally decoupled. Which they should've been from the start ;-)
+            }
+        }
+
         if ($current < '1.2')
         {
             $this->EE->load->dbforge();

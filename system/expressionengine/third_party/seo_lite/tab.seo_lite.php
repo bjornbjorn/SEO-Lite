@@ -34,18 +34,43 @@ class Seo_lite_tab {
         $title = $keywords = $description = '';
         if($entry_id)
         {
+            $table_name = 'seolite_content';
             $where = array(
                  'entry_id' => $entry_id,
                  'site_id' => $this->EE->config->item('site_id')
              );
 
-            if (isset($this->EE->publisher_lib))
+
+            // -------------------------------------------
+            // Allows one to modify the SEO Lite pulled up in the tab (ie. for translation addons)
+            //
+            // Params sent in:
+            // - $where - an array of where (activerecord) to check for .. already contains 'entry_id' and 'site_id'
+            // - $table_name - the name of the table to pull data from (without db prefix, defaults to 'seolite_content')
+            //
+            // Return value:
+            // Please return nothing at all or an array which contains 'where' and/or 'table_name' to replace the existing
+            // where array and table name to pull data from. This will be used to ->get(where, table_name) the data so
+            // you can basically pull whatever from any table.
+            //
+            // But remember the results must contain 'title', 'keywords', 'description' which SEO Lite rely on for the
+            // tab content.
+            //
+            // -------------------------------------------
+            if ($this->EE->extensions->active_hook('seo_lite_tab_content') === TRUE)
             {
-                $where['publisher_lang_id'] = $this->EE->publisher_lib->lang_id;
-                $where['publisher_status']  = $this->EE->publisher_lib->status;
+                $hook_result = $this->return_data = $this->EE->extensions->call('seo_lite_tab_content', $where, $table_name);
+                if($hook_result && isset($hook_result['where'])) {
+                    $where = $hook_result['where'];
+                }
+                if($hook_result && isset($hook_result['table_name'])) {
+                    $table_name = $hook_result['table_name'];
+                }
+
+                if ($this->EE->extensions->end_script === TRUE) return;
             }
 
-            $q = $this->EE->db->get_where('seolite_content', $where);
+            $q = $this->EE->db->get_where($table_name, $where);
 
             if($q->num_rows())
             {
@@ -135,30 +160,79 @@ class Seo_lite_tab {
             'description' => $seo_lite_data['seo_lite_description'],
         );
 
+        $table_name = 'seolite_content';
         $where = array(
              'entry_id' => $entry_id,
              'site_id' => $site_id
         );
 
-        if (isset($this->EE->publisher_lib))
-        {
-            $content['publisher_lang_id'] = $this->EE->publisher_lib->lang_id;
-            $content['publisher_status']  = $this->EE->publisher_lib->status;
+        $default_where = $where;
+        $default_content = $content;
+        $default_table_name = $table_name;
 
-            $where['publisher_lang_id'] = $this->EE->publisher_lib->lang_id;
-            $where['publisher_status']  = $this->EE->publisher_lib->status;
+        // -------------------------------------------
+        // Allows one to modify the SEO Lite saved in the tab (ie. for translation addons)
+        //
+        // Params sent in:
+        // - $where - an array of where (activerecord) on UPDATE .. already contains 'entry_id' and 'site_id'
+        // - $table_name - the name of the table to pull data from (without db prefix, defaults to 'seolite_content')
+        // - $content - the current content saved (an array of site_id, entry_id, title, keywords, description)
+        //
+        // Return value:
+        // Please return nothing at all or an array which contains 'where' and/or 'table_name' and/or 'content' to
+        // replace any of these.
+        //
+        // But remember the content must contain 'site_id', 'entry_id', 'title', 'keywords', 'description'
+        //
+        // -------------------------------------------
+        if ($this->EE->extensions->active_hook('seo_lite_tab_content_save') === TRUE) {
+
+            $hook_result = $this->return_data = $this->EE->extensions->call('seo_lite_tab_content_save', $where, $table_name, $content);
+            if($hook_result && isset($hook_result['where'])) {
+                $where = $hook_result['where'];
+            }
+            if($hook_result && isset($hook_result['table_name'])) {
+                $table_name = $hook_result['table_name'];
+            }
+            if($hook_result && isset($hook_result['content'])) {
+                $content = $hook_result['content'];
+            }
+
+            if ($this->EE->extensions->end_script === TRUE) return;
         }
 
-        $q = $this->EE->db->get_where('seolite_content', $where);
+        $q = $this->EE->db->get_where($table_name, $where);
 
         if($q->num_rows())
         {
             $this->EE->db->where($where);
-            $this->EE->db->update('seolite_content', $content);
+            $this->EE->db->update($table_name, $content);
         }
         else
         {
-            $this->EE->db->insert('seolite_content', $content);
+            $this->EE->db->insert($table_name, $content);
+        }
+
+        /**
+         * If the data was stored to another table (ie if a third party addon took control over this, we still just
+         * store the content in case that third_party addon is uninstalled later. Note that this may cause problems
+         * with addons that store multiple versions for the same entry_id (ie. Publisher). If so SEO Lite will end
+         * up with the latest stored version (which could be in language 1 or language 2 etc.) .. but in cases like
+         * these a lot of data won't make sense anyway so .. in other cases, where the addon uses a different entry_id
+         * for each type of content everything should work just fine if uninstalling that addon.
+         */
+        if($table_name != $default_table_name) {
+            $q = $this->EE->db->get_where($default_table_name, $default_where);
+
+            if($q->num_rows())
+            {
+                $this->EE->db->where($default_where);
+                $this->EE->db->update($default_table_name, $default_content);
+            }
+            else
+            {
+                $this->EE->db->insert($default_table_name, $default_content);
+            }
         }
     }
 
