@@ -2,6 +2,63 @@ Changelog for SEOLite
 =====================
 The dates in this changelog use international date format: YYYY-MM-DD (ISO8601)
 
+1.4.7 - 2014-03-19
+--------------------
+* Added hooks: seo_lite_tab_content_save, seo_lite_tab_content and seo_lite_fetch_data
+
+
+seo_lite_tab_content_save:
+
+        // -------------------------------------------
+        // Allows one to modify the SEO Lite saved in the tab (ie. for translation addons)
+        //
+        // Params sent in:
+        // - $where - an array of where (activerecord) on UPDATE .. already contains 'entry_id' and 'site_id'
+        // - $table_name - the name of the table to pull data from (without db prefix, defaults to 'seolite_content')
+        // - $content - the current content saved (an array of site_id, entry_id, title, keywords, description)
+        //
+        // Return value:
+        // Please return nothing at all or an array which contains 'where' and/or 'table_name' and/or 'content' to
+        // replace any of these.
+        //
+        // But remember the content must contain 'site_id', 'entry_id', 'title', 'keywords', 'description'
+        //
+        // -------------------------------------------
+
+seo_lite_tab_content:
+
+            // -------------------------------------------
+            // Allows one to modify the SEO Lite pulled up in the tab (ie. for translation addons)
+            //
+            // Params sent in:
+            // - $where - an array of where (activerecord) to check for .. already contains 'entry_id' and 'site_id'
+            // - $table_name - the name of the table to pull data from (without db prefix, defaults to 'seolite_content')
+            //
+            // Return value:
+            // Please return nothing at all or an array which contains 'where' and/or 'table_name' to replace the existing
+            // where array and table name to pull data from. This will be used to ->get(where, table_name) the data so
+            // you can basically pull whatever from any table.
+            //
+            // But remember the results must contain 'title', 'keywords', 'description' which SEO Lite rely on for the
+            // tab content.
+            //
+            // -------------------------------------------
+
+
+seo_lite_fetch_data:
+
+            // -------------------------------------------
+            // Allows one to pull from another table
+            //
+            // Params sent in:
+            // - The table name
+            //
+            // Return data
+            //
+            // May be an array containing 'table_name' (new name of table to pull from)
+            // -------------------------------------------
+
+
 1.4.6.1 - 2013-11-06
 --------------------
 * Added tag parameters array to the hook

@@ -276,30 +276,6 @@ class Seo_lite_upd {
                 $this->EE->dbforge->drop_column('seolite_content', 'publisher_status');
                 $this->EE->dbforge->drop_column('seolite_content', 'publisher_lang_id');
 
-
-                // 5. Add hooks for publisher if they have not been installed
-
-                $hq = $this->EE->db->get_where('extensions', array('class' => 'Publisher_ext', 'method' => 'seo_lite_tab_content'));
-                if($hq->num_rows() == 0) {
-
-                    $hooks = array(
-                        'seo_lite_tab_content', 'seo_lite_tab_content_save', 'seo_lite_fetch_data'
-                    );
-
-                    foreach($hooks as $hook) {
-                        $this->EE->db->insert('extensions', array(
-                            'class' => 'Publisher_ext',
-                            'hook' => $hook,
-                            'method' => $hook,
-                            'priority' => '10',
-                            'settings' => '',
-                            'version' => '1.1.4',
-                            'enabled' => 'y',
-                        ));
-                    }
-
-                }
-
                 // Voilà - SEO Lite & Publisher totally decoupled. Which they should've been from the start ;-)
             }
         }
