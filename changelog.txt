@@ -2,6 +2,10 @@ Changelog for SEOLite
 =====================
 The dates in this changelog use international date format: YYYY-MM-DD (ISO8601)
 
+1.4.8 - 2014-05-07
+------------------
+* Support for "max_length" in extra text field + fix for extra fields for EE 2.8.1+
+
 1.4.7 - 2014-03-19
 --------------------
 * Added hooks: seo_lite_tab_content_save, seo_lite_tab_content and seo_lite_fetch_data

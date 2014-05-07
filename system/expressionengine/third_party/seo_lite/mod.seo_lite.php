@@ -173,13 +173,19 @@ class Seo_lite {
                     if($channel_id && isset($seolite_extra_config[$channel_id])) {
 
                         foreach($seolite_extra_config[$channel_id] as $extra_field_name => $field_info) {
-                            $field_value = $q->row('field_id_'.$field_info['field_id']);
+                            $field_value_key = 'field_id_'.$field_info['field_id'];
+                            $field_value = $seolite_entry->$field_value_key;
 
                             if(isset($field_info['field_type'])) {
                                 switch($field_info['field_type']) {
                                     case 'text':
                                         $field_value = trim(strip_tags($field_value));
+
+                                        if(isset($field_info['max_length'])) {
+                                            $field_value = substr($field_value, 0, $field_info['max_length']) . ' ...';
+                                        }
                                         break;
+
                                     case 'assets':
 
                                         /**
