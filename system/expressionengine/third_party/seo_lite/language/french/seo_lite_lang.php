@@ -16,7 +16,9 @@ $lang['seodescription'] = 'SEO Description';
 $lang['description_instructions'] = 'Renseignez une ou deux courtes phrases qui résument le contenu de la page (la plupart des moteurs de recherche afficheront ceci dans les résultats de recherche)';
 $lang['default_title_postfix'] = 'Séparateur de titre par défaut';
 $lang['default_title_postfix_description'] = "Ce que vous indiquez ici sera ajouté après le tag {title}, à moins que cette configuration ne soit écrasée par le paramètre <em>title_postfix</em> dans le tag.";
-
+$lang['include_pagination_in_canonical_description'] = "Include pagination links (i.e. P10) in canonical URL output?";
+$lang['include_pagination_in_canonical_description_y'] = "Oui";
+$lang['include_pagination_in_canonical_description_n'] = "Non";
 
 $lang['docs'] = 'Documentation';
 $lang['settings'] = 'Options';

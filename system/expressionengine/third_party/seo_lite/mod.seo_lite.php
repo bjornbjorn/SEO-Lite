@@ -408,6 +408,12 @@ class Seo_lite {
 
     private function get_canonical_url($ignore_last_segments, $page_uri = FALSE)
     {
+        // Check if we're wanting to strip out the pagination segment from the URL
+        $site_id = $this->get_param('site_id', $this->EE->config->item('site_id'));
+        $q = $this->EE->db->get_where('seolite_config', array('seolite_config.site_id' => $site_id));
+        $seolite_entry = $q->row();
+        $include_pagination_in_canonical = $seolite_entry->include_pagination_in_canonical;
+        
         if(!$ignore_last_segments)
         {
             $segments = explode('/', $this->get_request_uri());
@@ -445,7 +451,11 @@ class Seo_lite {
             {
                 $canonical_url = $this->EE->functions->fetch_current_uri();
             }
-
+            
+            if ($include_pagination_in_canonical == "n") {
+                $canonical_url = preg_replace("/P(\d+)$/", "", $canonical_url);
+            }
+            
             return $canonical_url;
         }
         else
@@ -460,7 +470,11 @@ class Seo_lite {
 
             $canonical_url = $this->EE->functions->create_url($canonical_url_segments);
         }
-
+        
+        if ($include_pagination_in_canonical == "n") {
+            $canonical_url = preg_replace("/P(\d+)$/", "", $canonical_url);
+        }
+        
         return $canonical_url;
     }
 
