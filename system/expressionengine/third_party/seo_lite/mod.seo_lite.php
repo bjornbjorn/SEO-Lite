@@ -451,12 +451,6 @@ class Seo_lite {
             {
                 $canonical_url = $this->EE->functions->fetch_current_uri();
             }
-            
-            if ($include_pagination_in_canonical == "n") {
-                $canonical_url = preg_replace("/P(\d+)$/", "", $canonical_url);
-            }
-            
-            return $canonical_url;
         }
         else
         {
