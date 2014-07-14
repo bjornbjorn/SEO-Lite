@@ -13,7 +13,7 @@
  */
 class Seo_lite_upd {
 		
-	var $version        = '1.4.8';
+	var $version        = '1.4.9';
 	var $module_name = "Seo_lite";
 
     /**
@@ -106,6 +106,11 @@ class Seo_lite_upd {
                 'type' => 'varchar',
                 'constraint' => '60',
                 'null' => FALSE),
+            
+            'include_pagination_in_canonical' => array(
+                'type' => 'ENUM("y","n")',
+                'default' => "y",
+                'null' => FALSE),
 
         );
 
@@ -120,6 +125,7 @@ class Seo_lite_upd {
             'default_keywords' => 'your, default, keywords, here',
             'default_description' => 'Your default description here',
             'default_title_postfix' => ' |&nbsp;',
+            'include_pagination_in_canonical' => 'y',
         ));
 
         $this->EE->load->library('layout');

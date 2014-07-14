@@ -87,7 +87,18 @@
             form_input('seolite_default_title_postfix', set_value('seolite_default_title_postfix', $default_title_postfix), 'id="seolite_default_title_postfix"')
             )
         );
-
+        
+        $this->table->add_row(array(
+                lang('include_pagination_in_canonical_description', 'seolite_include_pagination_in_canonical'),
+                form_error('seolite_include_pagination_in_canonical').            
+                form_radio('seolite_include_pagination_in_canonical', set_value('seolite_include_pagination_in_canonical', $include_pagination_in_canonical), 'id="seolite_include_pagination_in_canonical_y"')." ".
+                lang('include_pagination_in_canonical_description_y', 'seolite_include_pagination_in_canonical_y').
+                "<br />".
+                form_radio('seolite_include_pagination_in_canonical', set_value('seolite_include_pagination_in_canonical', $include_pagination_in_canonical), 'id="seolite_include_pagination_in_canonical_n"')." ".
+                lang('include_pagination_in_canonical_description_n', 'seolite_include_pagination_in_canonical_n')
+            )
+        );
+        
 		echo $this->table->generate();
 	?>
 	<p>
