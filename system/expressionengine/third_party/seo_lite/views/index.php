@@ -91,10 +91,10 @@
         $this->table->add_row(array(
                 lang('include_pagination_in_canonical_description', 'seolite_include_pagination_in_canonical'),
                 form_error('seolite_include_pagination_in_canonical').            
-                form_radio('seolite_include_pagination_in_canonical', set_value('seolite_include_pagination_in_canonical', $include_pagination_in_canonical), 'id="seolite_include_pagination_in_canonical_y"')." ".
+                form_radio('seolite_include_pagination_in_canonical', 'y', $include_pagination_in_canonical == 'y')." ".
                 lang('include_pagination_in_canonical_description_y', 'seolite_include_pagination_in_canonical_y').
                 "<br />".
-                form_radio('seolite_include_pagination_in_canonical', set_value('seolite_include_pagination_in_canonical', $include_pagination_in_canonical), 'id="seolite_include_pagination_in_canonical_n"')." ".
+                form_radio('seolite_include_pagination_in_canonical', 'n', $include_pagination_in_canonical == 'n')." ".
                 lang('include_pagination_in_canonical_description_n', 'seolite_include_pagination_in_canonical_n')
             )
         );
