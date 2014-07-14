@@ -108,8 +108,8 @@ class Seo_lite_upd {
                 'null' => FALSE),
             
             'include_pagination_in_canonical' => array(
-                'type' => 'ENUM("y","n")',
-                'default' => "y",
+                'type' => 'ENUM(\'y\',\'n\')',
+                'default' => 'y',
                 'null' => FALSE),
 
         );
@@ -203,6 +203,10 @@ class Seo_lite_upd {
         if ($current == $this->version)
         {
             return FALSE;
+        }
+
+        if($current < '1.4.9') {
+            $this->EE->db->query("ALTER TABLE  `".$this->EE->db->dbprefix('seolite_config')."` ADD  `include_pagination_in_canonical` ENUM('y', 'n') NOT NULL DEFAULT  'y'");
         }
 
         /**
