@@ -184,6 +184,7 @@ class Seo_lite {
                                         if(isset($field_info['max_length'])) {
                                             $field_value = substr($field_value, 0, $field_info['max_length']) . ' ...';
                                         }
+                                        $field_value = htmlentities($field_value);
                                         break;
 
                                     case 'assets':

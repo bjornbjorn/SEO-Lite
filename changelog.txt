@@ -2,6 +2,14 @@ Changelog for SEOLite
 =====================
 The dates in this changelog use international date format: YYYY-MM-DD (ISO8601)
 
+1.4.9.1 - 2014-08-12
+--------------------
+* Bugfix: {extra:desc} is now wrapped in htmlentities() 
+
+1.4.9 - 2014-07-14
+------------------
+* Adding global option to strip out pagination string from canonical URLs.
+
 1.4.8 - 2014-05-07
 ------------------
 * Support for "max_length" in extra text field + fix for extra fields for EE 2.8.1+
