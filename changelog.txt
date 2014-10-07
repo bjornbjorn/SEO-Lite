@@ -2,6 +2,10 @@ Changelog for SEOLite
 =====================
 The dates in this changelog use international date format: YYYY-MM-DD (ISO8601)
 
+1.4.9.2 - 2014-10-07
+--------------------
+* Added support for "photo_frame" in extra fields - more info here: https://gist.github.com/bjornbjorn/4039233#comment-1313462
+
 1.4.9.1 - 2014-08-12
 --------------------
 * Bugfix: {extra:desc} is now wrapped in htmlentities() 

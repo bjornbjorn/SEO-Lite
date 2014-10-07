@@ -187,6 +187,19 @@ class Seo_lite {
                                         $field_value = htmlentities($field_value);
                                         break;
 
+
+                                    case 'photo_frame':
+                                        $photo_frame_id = $field_value; // photo_frame stores exp_photo_frame.entry_id as field_value
+                                        $q = $this->EE->db->from('photo_frame')->where('entry_id', $photo_frame_id)->get();
+                                        if($q->num_rows() > 0) {
+                                            $field_value = $q->row('file');
+                                            $field_value = $this->get_url_from_filedir_id($field_value);
+                                        } else {
+                                            $field_value = '';
+                                        }
+
+                                        break;
+
                                     case 'assets':
 
                                         /**
@@ -220,13 +233,7 @@ class Seo_lite {
                                         /**
                                          * If string contains a {filedir_x} reference we replace it with the correct url
                                          */
-                                        if (preg_match('/^{filedir_(\d+)}/', $field_value, $matches))
-                                        {
-                                            $filedir_id = $matches[1];
-                                            $this->EE->load->model('file_upload_preferences_model');
-                                            $upload_dest_info = $this->EE->file_upload_preferences_model->get_file_upload_preferences(FALSE, $filedir_id);
-                                            $field_value = str_replace('{filedir_'.$filedir_id.'}', $upload_dest_info['url'], $field_value);
-                                        }
+                                        $field_value = $this->get_url_from_filedir_id($field_value);
                                         break;
                                 }
 
@@ -345,6 +352,24 @@ class Seo_lite {
         return $tagdata;
     }
 
+
+    /**
+     * Get full url to a file from {filedir_id}/blabla/file.jpeg string
+     *
+     * @param $str
+     */
+    private function get_url_from_filedir_id($str)
+    {
+        if (preg_match('/^{filedir_(\d+)}/', $str, $matches))
+        {
+            $filedir_id = $matches[1];
+            $this->EE->load->model('file_upload_preferences_model');
+            $upload_dest_info = $this->EE->file_upload_preferences_model->get_file_upload_preferences(FALSE, $filedir_id);
+            $str = str_replace('{filedir_'.$filedir_id.'}', $upload_dest_info['url'], $str);
+        }
+
+        return $str;
+    }
 
     /**
      * Get the last segment from the URL (ignore pagination in url)
