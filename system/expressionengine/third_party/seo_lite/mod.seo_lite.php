@@ -158,6 +158,8 @@ class Seo_lite {
             if($q->num_rows() > 0)
             {
                 $seolite_entry = $q->row();
+                $entry_id = $seolite_entry->entry_id;
+
                 $tagdata = $this->get_tagdata($seolite_entry->template);
 
                 $vars = array(
@@ -201,7 +203,6 @@ class Seo_lite {
                                         break;
 
                                     case 'assets':
-
                                         /**
                                          * Older versions of Assets will store {filedir_1} etc. in the field_value field,
                                          * if we have this we don't need to look up the assets selection so just fall back
@@ -227,6 +228,7 @@ class Seo_lite {
                                             $assets_subfolder = $q->row('full_path');
                                             $field_value = '{filedir_'.$filedir_id.'}'.$assets_subfolder.$file_name;
                                         }
+
                                         // Fall through
                                     case 'file':
 
