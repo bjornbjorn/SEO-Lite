@@ -276,7 +276,10 @@ class Seo_lite {
 
         if($vars[$this->tag_prefix.'title'] != '')
         {
-            $title_postfix .= str_replace("&nbsp;"," ",$seolite_entry->default_title_postfix);
+          if ( $this->EE->TMPL->fetch_param('title_postfix', FALSE) === FALSE)
+          {
+            $title_postfix = str_replace("&nbsp;"," ",$seolite_entry->default_title_postfix);
+          }
         }
 
         $vars[$this->tag_prefix.'entry_title'] = $vars[$this->tag_prefix.'title'];
