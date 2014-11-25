@@ -2,6 +2,10 @@ Changelog for SEOLite
 =====================
 The dates in this changelog use international date format: YYYY-MM-DD (ISO8601)
 
+1.4.9.3 - 2014-11-25
+--------------------
+* Added support for channel parameter per pull request: https://github.com/bjornbjorn/SEO-Lite/pull/2
+
 1.4.9.2 - 2014-10-07
 --------------------
 * Added support for "photo_frame" in extra fields - more info here: https://gist.github.com/bjornbjorn/4039233#comment-1313462
