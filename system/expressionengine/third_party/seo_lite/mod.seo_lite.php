@@ -13,6 +13,7 @@ class Seo_lite {
 
 	var $return_data;
 	private $tag_prefix;
+	private static $cache;
     
 	public function Seo_lite() // backwards compatible __construct() won't work
 	{
@@ -276,7 +277,10 @@ class Seo_lite {
 
         if($vars[$this->tag_prefix.'title'] != '')
         {
-            $title_postfix .= str_replace("&nbsp;"," ",$seolite_entry->default_title_postfix);
+          if ( $this->EE->TMPL->fetch_param('title_postfix', FALSE) === FALSE)
+          {
+            $title_postfix = str_replace("&nbsp;"," ",$seolite_entry->default_title_postfix);
+          }
         }
 
         $vars[$this->tag_prefix.'entry_title'] = $vars[$this->tag_prefix.'title'];
@@ -445,10 +449,13 @@ class Seo_lite {
     private function get_canonical_url($ignore_last_segments, $page_uri = FALSE)
     {
         // Check if we're wanting to strip out the pagination segment from the URL
-        $site_id = $this->get_param('site_id', $this->EE->config->item('site_id'));
-        $q = $this->EE->db->get_where('seolite_config', array('seolite_config.site_id' => $site_id));
-        $seolite_entry = $q->row();
-        $include_pagination_in_canonical = $seolite_entry->include_pagination_in_canonical;
+        if ( ! isset(self::$cache['include_pagination_in_canonical']))
+        {
+            $site_id = $this->get_param('site_id', $this->EE->config->item('site_id'));
+            $q = $this->EE->db->get_where('seolite_config', array('seolite_config.site_id' => $site_id));
+            $seolite_entry = $q->row();
+            self::$cache['include_pagination_in_canonical'] = $seolite_entry->include_pagination_in_canonical;
+        }
         
         if(!$ignore_last_segments)
         {
@@ -501,7 +508,7 @@ class Seo_lite {
             $canonical_url = $this->EE->functions->create_url($canonical_url_segments);
         }
         
-        if ($include_pagination_in_canonical == "n") {
+        if (self::$cache['include_pagination_in_canonical'] == "n") {
             $canonical_url = preg_replace("/P(\d+)$/", "", $canonical_url);
         }
         
