@@ -8,26 +8,7 @@
     }
 </style>
 
-<script type="text/javascript">
 
-    $(document).ready(
-            function() {
-
-                $('#view_instructions').click(function(){
-                    if($('#instructions').is(':visible')) {
-                        $('#instructions').hide('fast');
-                        $('#view_instructions').html('Show instructions');
-                    }
-                    else
-                    {
-                        $('#instructions').show('fast');
-                        $('#view_instructions').html('Hide instructions');
-                    }
-                });
-                
-            });
-
-</script>
 
 <h3><a href="#" id="view_instructions">View instructions</a></h3>
 
