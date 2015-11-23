@@ -36,7 +36,7 @@
 	);
 ?>
 
-<?=form_open($_form_base.'&method=save_settings')?>
+<?=form_open($save_settings_url)?>
 
 	<?php 
 

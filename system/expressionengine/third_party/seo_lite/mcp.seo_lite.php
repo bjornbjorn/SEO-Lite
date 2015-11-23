@@ -17,10 +17,6 @@ class Seo_lite_mcp
 
 	function Seo_lite_mcp( $switch = TRUE )
 	{
-		// Make a local reference to the ExpressionEngine super object
-		$this->base	 	 = BASE.AMP.'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module='.$this->module_name;
-		$this->form_base = 'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module='.$this->module_name;
-
         // uncomment this if you want navigation buttons at the top
 		ee()->cp->set_right_nav(array(
 				'settings'			=> $this->base,
@@ -53,6 +49,7 @@ class Seo_lite_mcp
         $vars['default_keywords'] = $config->row('default_keywords');
         $vars['default_title_postfix'] = $config->row('default_title_postfix');
         $vars['include_pagination_in_canonical'] = $config->row('include_pagination_in_canonical');
+        $vars['save_settings_url'] =  ee('CP/URL', 'addons/settings/seo_lite/save_settings');
 
 		return $this->content_wrapper('index', 'seo_lite_welcome', $vars);
 	}
@@ -88,22 +85,14 @@ class Seo_lite_mcp
         }
 
 		ee()->session->set_flashdata('message_success', lang('settings_saved'));
-		ee()->functions->redirect($this->base);
+		ee()->functions->redirect(ee('CP/URL', 'addons/settings/seo_lite'));
 	}
 
 	
 	function content_wrapper($content_view, $lang_key, $vars = array())
 	{
 		$vars['content_view'] = $content_view;
-		$vars['_base'] = $this->base;
-		$vars['_form_base'] = $this->form_base;
-
-        // ee()->cp->set_variable was deprecated in 2.6
-        if (version_compare(APP_VER, '2.6', '>=')) {
-            ee()->view->cp_page_title = lang($lang_key);
-        } else {
-            ee()->cp->set_variable('cp_page_title', lang($lang_key));
-        }
+        ee()->view->cp_page_title = lang($lang_key);
 
 		ee()->cp->set_breadcrumb($this->base, lang('seo_lite_module_name'));
 		return ee()->load->view('_wrapper', $vars, TRUE);
