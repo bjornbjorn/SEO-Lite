@@ -84,7 +84,12 @@ class Seo_lite_mcp
             ee()->db->update('seolite_config', $data_arr);
         }
 
-		ee()->session->set_flashdata('message_success', lang('settings_saved'));
+        ee('CP/Alert')->makeInline('seo_lite-settings-saved')
+            ->asIssue()
+            ->withTitle(lang('seolite_settings_saved_title'))
+            ->addToBody(lang('seolite_settings_saved'))
+            ->now();
+
 		ee()->functions->redirect(ee('CP/URL', 'addons/settings/seo_lite'));
 	}
 

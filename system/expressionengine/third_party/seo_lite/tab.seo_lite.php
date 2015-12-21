@@ -27,7 +27,7 @@ class Seo_lite_tab {
         }
     }
 
-    public function publish_tabs($channel_id, $entry_id = '')
+    public function display($channel_id, $entry_id = '')
     {
         $settings = array();
 
@@ -87,6 +87,7 @@ class Seo_lite_tab {
            'field_data' => $title,
            'field_list_items' => '',
            'field_fmt' => '',
+            'options' => array(),
            'field_instructions' => lang('title_instructions'),
            'field_show_fmt' => 'n',
            'field_fmt_options' => array(),
@@ -135,7 +136,7 @@ class Seo_lite_tab {
         return $settings;
     }
 
-    function validate_publish($params)
+    function validate($channel_entry, $params)
     {
         return TRUE;
     }
@@ -146,7 +147,7 @@ class Seo_lite_tab {
      * @param  $params
      * @return void
      */
-    function publish_data_db($params)
+    function save($channel_entry, $params)
     {
         $seo_lite_data = $params['mod_data'];
         $site_id = $params['meta']['site_id'];
@@ -242,7 +243,7 @@ class Seo_lite_tab {
      * @param  $params
      * @return void
      */
-    function publish_data_delete_db($params)
+    function delete($params)
     {
         foreach($params['entry_ids'] as $i => $entry_id)
         {

@@ -37,6 +37,8 @@
                 <!-- settings tab content -->
                 <div class="tab t-settings tab-open">
 
+                    <?php echo ee('CP/Alert')->get('seolite-settings-saved')?>
+
                     <h1>Settings</h1>
 
                     <?=form_open($save_settings_url, ['class' => 'settings'])?>
@@ -99,8 +101,8 @@
                         </div>
 
                         <div class="setting-field col w-10 last">
-                            <label class="choice mr chosen yes"><input type="radio" name="seolite_include_pagination_in_canonical" <?php if($include_pagination_in_canonical == 'y') echo 'checked="checked"';?>> <?php echo lang('include_pagination_in_canonical_description_y');?></label>
-                            <label class="choice no"><input type="radio" name="seolite_include_pagination_in_canonical"<?php if($include_pagination_in_canonical == 'n') echo 'checked="checked"';?>> <?php echo lang('include_pagination_in_canonical_description_n');?></label>
+                            <label class="choice mr <?php if($include_pagination_in_canonical == 'y') echo "chosen";?> yes"><input type="radio" value="y" name="seolite_include_pagination_in_canonical" <?php if($include_pagination_in_canonical == 'y') echo 'checked="checked"';?>> <?php echo lang('include_pagination_in_canonical_description_y');?></label>
+                            <label class="choice no <?php if($include_pagination_in_canonical == 'n') echo "chosen";?>"><input type="radio" value="n" name="seolite_include_pagination_in_canonical"<?php if($include_pagination_in_canonical == 'n') echo 'checked="checked"';?>> <?php echo lang('include_pagination_in_canonical_description_n');?></label>
                         </div>
 
                     </fieldset>
