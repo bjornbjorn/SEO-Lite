@@ -149,22 +149,21 @@ class Seo_lite_tab {
      */
     function save($channel_entry, $params)
     {
-        $seo_lite_data = $params['mod_data'];
-        $site_id = $params['meta']['site_id'];
-        $entry_id = $params['entry_id'];
+        $site_id = $channel_entry->site_id;
+        $entry_id = $channel_entry->entry_id;
 
         $content = array(
             'site_id' => $site_id,
             'entry_id' => $entry_id,
-            'title' => $seo_lite_data['seo_lite_title'],
-            'keywords' => isset($seo_lite_data['seo_lite_keywords']) ? $seo_lite_data['seo_lite_keywords'] : '',
-            'description' => $seo_lite_data['seo_lite_description'],
+            'title' => $params['seo_lite_title'],
+            'keywords' => isset($params['seo_lite_keywords']) ? $params['seo_lite_keywords'] : '',
+            'description' => $params['seo_lite_description'],
         );
 
         $table_name = 'seolite_content';
         $where = array(
-             'entry_id' => $entry_id,
-             'site_id' => $site_id
+            'entry_id' => $entry_id,
+            'site_id' => $site_id
         );
 
         $default_where = $where;
