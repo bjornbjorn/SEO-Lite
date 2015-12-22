@@ -80,7 +80,7 @@ class Seo_lite_tab {
             }
         }
 
-        $settings[] = array(
+        $settings['seo_lite_title'] = array(
            'field_id' => 'seo_lite_title',
            'field_label' => lang('seotitle'),
            'field_required' => 'n',
@@ -99,7 +99,7 @@ class Seo_lite_tab {
 
         if($this->EE->config->item('seolite_show_keywords_field') != 'n') {
 
-            $settings[] = array(
+            $settings['seo_lite_keywords'] = array(
                'field_id' => 'seo_lite_keywords',
                'field_label' => lang('seokeywords'),
                'field_required' => 'n',
@@ -116,7 +116,7 @@ class Seo_lite_tab {
            );
         }
 
-        $settings[] = array(
+        $settings['seo_lite_description'] = array(
            'field_id' => 'seo_lite_description',
            'field_label' => lang('seodescription'),
            'field_required' => 'n',
