@@ -27,7 +27,7 @@ class Seo_lite_tab {
         }
     }
 
-    public function publish_tabs($channel_id, $entry_id = '')
+    public function display($channel_id, $entry_id = '')
     {
         $settings = array();
 
@@ -80,13 +80,14 @@ class Seo_lite_tab {
             }
         }
 
-        $settings[] = array(
+        $settings['seo_lite_title'] = array(
            'field_id' => 'seo_lite_title',
            'field_label' => lang('seotitle'),
            'field_required' => 'n',
            'field_data' => $title,
            'field_list_items' => '',
            'field_fmt' => '',
+            'options' => array(),
            'field_instructions' => lang('title_instructions'),
            'field_show_fmt' => 'n',
            'field_fmt_options' => array(),
@@ -98,7 +99,7 @@ class Seo_lite_tab {
 
         if($this->EE->config->item('seolite_show_keywords_field') != 'n') {
 
-            $settings[] = array(
+            $settings['seo_lite_keywords'] = array(
                'field_id' => 'seo_lite_keywords',
                'field_label' => lang('seokeywords'),
                'field_required' => 'n',
@@ -115,7 +116,7 @@ class Seo_lite_tab {
            );
         }
 
-        $settings[] = array(
+        $settings['seo_lite_description'] = array(
            'field_id' => 'seo_lite_description',
            'field_label' => lang('seodescription'),
            'field_required' => 'n',
@@ -135,7 +136,7 @@ class Seo_lite_tab {
         return $settings;
     }
 
-    function validate_publish($params)
+    function validate($channel_entry, $params)
     {
         return TRUE;
     }
@@ -146,24 +147,23 @@ class Seo_lite_tab {
      * @param  $params
      * @return void
      */
-    function publish_data_db($params)
+    function save($channel_entry, $params)
     {
-        $seo_lite_data = $params['mod_data'];
-        $site_id = $params['meta']['site_id'];
-        $entry_id = $params['entry_id'];
+        $site_id = $channel_entry->site_id;
+        $entry_id = $channel_entry->entry_id;
 
         $content = array(
             'site_id' => $site_id,
             'entry_id' => $entry_id,
-            'title' => $seo_lite_data['seo_lite_title'],
-            'keywords' => isset($seo_lite_data['seo_lite_keywords']) ? $seo_lite_data['seo_lite_keywords'] : '',
-            'description' => $seo_lite_data['seo_lite_description'],
+            'title' => $params['seo_lite_title'],
+            'keywords' => isset($params['seo_lite_keywords']) ? $params['seo_lite_keywords'] : '',
+            'description' => $params['seo_lite_description'],
         );
 
         $table_name = 'seolite_content';
         $where = array(
-             'entry_id' => $entry_id,
-             'site_id' => $site_id
+            'entry_id' => $entry_id,
+            'site_id' => $site_id
         );
 
         $default_where = $where;
@@ -242,7 +242,7 @@ class Seo_lite_tab {
      * @param  $params
      * @return void
      */
-    function publish_data_delete_db($params)
+    function delete($params)
     {
         foreach($params['entry_ids'] as $i => $entry_id)
         {
