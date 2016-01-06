@@ -37,11 +37,11 @@
                 <!-- settings tab content -->
                 <div class="tab t-settings tab-open">
 
-                    <?php echo ee('CP/Alert')->get('seolite-settings-saved')?>
-
                     <h1>Settings</h1>
 
                     <?=form_open($save_settings_url, ['class' => 'settings'])?>
+                    <?php echo ee('CP/Alert')->get('seolite-settings-saved')?>
+
                     <fieldset class="col-group">
 
                         <div class="required">
