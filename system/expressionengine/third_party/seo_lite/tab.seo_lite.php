@@ -18,7 +18,7 @@ class Seo_lite_tab {
         $this->EE->lang->loadfile('seo_lite');
         // don't load config if we have this config item. This is used for overriding from a master config
         if(!$this->EE->config->item('seolite_show_keywords_field')) {
-           // $this->EE->load->config('seolite'); //  @TODO EE3 bug? can't load config file -> Error: The configuration file seolite.php does not exist.
+            $this->EE->load->config('seolite');
         }
 
         $tab_title = $this->EE->config->item('seolite_tab_title') ? $this->EE->config->item('seolite_tab_title') : $this->EE->config->item('seo_lite_tab_title');   // config item was renamed but we support the old seo_lite_tab_title as well
