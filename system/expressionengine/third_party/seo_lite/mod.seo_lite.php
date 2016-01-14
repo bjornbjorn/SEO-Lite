@@ -197,7 +197,7 @@ class Seo_lite {
                                         }
                                         $field_value = htmlentities($field_value);
                                         break;
-                                    
+
                                     case 'file':
 
                                         /**
