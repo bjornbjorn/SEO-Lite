@@ -197,48 +197,7 @@ class Seo_lite {
                                         }
                                         $field_value = htmlentities($field_value);
                                         break;
-
-
-                                    case 'photo_frame':
-                                        $photo_frame_id = $field_value; // photo_frame stores exp_photo_frame.entry_id as field_value
-                                        $q = $this->EE->db->from('photo_frame')->where('entry_id', $photo_frame_id)->get();
-                                        if($q->num_rows() > 0) {
-                                            $field_value = $q->row('file');
-                                            $field_value = $this->get_url_from_filedir_id($field_value);
-                                        } else {
-                                            $field_value = '';
-                                        }
-
-                                        break;
-
-                                    case 'assets':
-                                        /**
-                                         * Older versions of Assets will store {filedir_1} etc. in the field_value field,
-                                         * if we have this we don't need to look up the assets selection so just fall back
-                                         * to regular file.
-                                         */
-                                        if(strpos($field_value, '{filedir_') === FALSE) {
-                                            $this->EE->db->select('f.filedir_id, f.file_name, fo.full_path');
-                                            $this->EE->db->from('assets_files f');
-                                            $this->EE->db->join('assets_selections s', 's.file_id = f.file_id');
-                                            $this->EE->db->join('assets_folders fo', 'fo.folder_id = f.folder_id', 'LEFT');
-                                            $this->EE->db->where('s.field_id', $field_info['field_id']);
-                                            $this->EE->db->where('s.entry_id', $entry_id);
-                                            $this->EE->db->where('s.sort_order', 0);
-                                            $q = $this->EE->db->get();
-
-                                            if($q->num_rows() === 0)
-                                            {
-                                                break;
-                                            }
-
-                                            $filedir_id = $q->row('filedir_id');
-                                            $file_name = $q->row('file_name');
-                                            $assets_subfolder = $q->row('full_path');
-                                            $field_value = '{filedir_'.$filedir_id.'}'.$assets_subfolder.$file_name;
-                                        }
-
-                                        // Fall through
+                                    
                                     case 'file':
 
                                         /**
