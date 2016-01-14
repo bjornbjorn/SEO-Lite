@@ -29,7 +29,6 @@ class Seo_lite_mcp
 		ee()->load->library('javascript');
 		ee()->load->helper('form');
 		ee()->lang->loadfile('seo_lite');
-        ee()->cp->add_to_foot($this->js());
 	}
 
 	function index() 
@@ -51,7 +50,8 @@ class Seo_lite_mcp
         $vars['include_pagination_in_canonical'] = $config->row('include_pagination_in_canonical');
         $vars['save_settings_url'] =  ee('CP/URL', 'addons/settings/seo_lite/save_settings');
 
-		return $this->content_wrapper('index', 'seo_lite_welcome', $vars);
+        $view = ee('View')->make('seo_lite:index');
+        return $view->render($vars);
 	}
 	
 	function save_settings()
@@ -84,52 +84,15 @@ class Seo_lite_mcp
             ee()->db->update('seolite_config', $data_arr);
         }
 
-        ee('CP/Alert')->makeInline('seo_lite-settings-saved')
-            ->asIssue()
+        ee('CP/Alert')->makeStandard('seolite-settings-saved')
+            ->asSuccess()
             ->withTitle(lang('seolite_settings_saved_title'))
             ->addToBody(lang('seolite_settings_saved'))
-            ->now();
+            ->defer();
 
 		ee()->functions->redirect(ee('CP/URL', 'addons/settings/seo_lite'));
 	}
 
-	
-	function content_wrapper($content_view, $lang_key, $vars = array())
-	{
-		$vars['content_view'] = $content_view;
-        ee()->view->cp_page_title = lang($lang_key);
-
-		ee()->cp->set_breadcrumb($this->base, lang('seo_lite_module_name'));
-		return ee()->load->view('_wrapper', $vars, TRUE);
-	}
-
-
-    private function js()
-    {
-        return <<<EOJS
-<script>
-    $(document).ready(
-            function() {
-
-
-                $('body').on('click', '#view_instructions', function(e) {
-                    e.preventDefault();
-                    if($('#instructions').is(':visible')) {
-                        $('#instructions').hide('fast');
-                        $('#view_instructions').html('Show instructions');
-                    }
-                    else
-                    {
-                        $('#instructions').show('fast');
-                        $('#view_instructions').html('Hide instructions');
-                    }
-
-                });
-            });
-
-</script>
-EOJS;
-    }
 }
 
 /* End of file mcp.seo_lite.php */ 
