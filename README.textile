@@ -1,10 +1,14 @@
 ﻿SEO Lite is a lightweight addon for ExpressionEngine which will add a tab where the user can specify meta keywords, descriptions and alternatively override the title with a SEO optimized version.
 
-Note; version 1.5+ is for *ExpressionEngine 3.1+*. Latest release for EE2 is 1.4.9.3
+h3. ExpressionEngine 3.1+
 
-h3. SEO Lite links
+* Download the "latest release .zip":https://github.com/bjornbjorn/SEO-Lite/archive/master.zip
+* Documentation: http://wedoaddons.com/seo-lite
 
-* "SEO Lite product page":http://wedoaddons.com/addon/seo-lite
-* "SEO Lite - Full Documentation":http://wedoaddons.com/addon/seo-lite/documentation
+h3. ExpressionEngine 2
 
-See our list of "ExpressionEngine Addons here":http://wedoaddons.com/addons
+* The latest release for EE2 is 1.4.9.3: ["Download zip":https://github.com/bjornbjorn/SEO-Lite/archive/release-1.4.9.3.zip].
+* EE2 documentation: http://ee2.wedoaddons.com/addon/seo-lite.html.
+
+Full list of releases: https://github.com/bjornbjorn/SEO-Lite/releases
+
