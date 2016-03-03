@@ -242,9 +242,10 @@ class Seo_lite_tab {
      * @param  $params
      * @return void
      */
-    function delete($params)
+    function delete($entry_ids)
     {
-        foreach($params['entry_ids'] as $i => $entry_id)
+
+        foreach($entry_ids as $i => $entry_id)
         {
             $this->EE->db->where('entry_id', $entry_id);
             $this->EE->db->delete('seolite_content');
