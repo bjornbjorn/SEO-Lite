@@ -15,7 +15,7 @@ class Seo_lite_mcp
 	var $form_base;		// base url for forms
 	var $module_name = "seo_lite";	
 
-	function Seo_lite_mcp( $switch = TRUE )
+	function __construct( $switch = TRUE )
 	{
         // uncomment this if you want navigation buttons at the top
 		ee()->cp->set_right_nav(array(
