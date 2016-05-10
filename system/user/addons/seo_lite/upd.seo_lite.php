@@ -13,7 +13,7 @@
  */
 class Seo_lite_upd {
 		
-	var $version        = '1.5.2';
+	var $version        = '1.5.3';
 	var $module_name = "Seo_lite";
 
     /**
@@ -21,10 +21,10 @@ class Seo_lite_upd {
      */
     public $EE;
 
-    function Seo_lite_upd( $switch = TRUE ) 
+    function __construct( $switch = TRUE )
     { 
 		// Make a local reference to the ExpressionEngine super object
-		$this->EE =& get_instance();
+		$this->EE = get_instance();
     } 
 
     /**

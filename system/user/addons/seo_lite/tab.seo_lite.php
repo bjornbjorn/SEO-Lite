@@ -14,7 +14,7 @@ class Seo_lite_tab {
 
     public function __construct()
     {
-        $this->EE =& get_instance();
+        $this->EE = get_instance();
         $this->EE->lang->loadfile('seo_lite');
         // don't load config if we have this config item. This is used for overriding from a master config
         if(!$this->EE->config->item('seolite_show_keywords_field')) {
