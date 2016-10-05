@@ -16,7 +16,7 @@
 
                     <h1>Settings</h1>
 
-                    <?php echo form_open($save_settings_url, ['class' => 'settings'])?>
+                    <?php echo form_open($save_settings_url, array('class' => 'settings'))?>
                     <?php echo ee('CP/Alert')->get('seolite-settings-saved')?>
 
                     <fieldset class="col-group">
