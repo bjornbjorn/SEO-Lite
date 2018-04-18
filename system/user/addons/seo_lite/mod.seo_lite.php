@@ -143,6 +143,7 @@ class Seo_lite {
             if($this->EE->config->item('seolite_extra')) {
                 $select_str .= ',d.*';
                 $this->EE->db->select($select_str);
+
                 $this->EE->db->from('channel_titles t, channel_data d');
                 $this->EE->db->where('t.entry_id', 'd.entry_id', FALSE);
             } else {
@@ -182,9 +183,23 @@ class Seo_lite {
 
                     if($channel_id && isset($seolite_extra_config[$channel_id])) {
 
+                    	  $extra_from_arr = [];
+                    	  $extra_where_arr = [];
+	                      foreach($seolite_extra_config[$channel_id] as $extra_field_name => $field_info) {
+	                      	$extra_data_table_name = 'channel_data_'.'field_'.$field_info['field_id'];
+	                      	array_push($extra_from_arr,$extra_data_table_name);
+	                        $extra_where_arr[$extra_data_table_name.'.entry_id'] = $entry_id;
+	                      }
+	                      $extra_from = implode(', ', $extra_from_arr);
+
+	                      $this->EE->db->from($extra_from);
+	                      $this->EE->db->where($extra_where_arr);
+	                      $extra_info = $this->EE->db->get();
+
                         foreach($seolite_extra_config[$channel_id] as $extra_field_name => $field_info) {
                             $field_value_key = 'field_id_'.$field_info['field_id'];
-                            $field_value = $seolite_entry->$field_value_key;
+                            
+                            $field_value = $extra_info->row($field_value_key);
 
                             if(isset($field_info['field_type'])) {
                                 switch($field_info['field_type']) {
