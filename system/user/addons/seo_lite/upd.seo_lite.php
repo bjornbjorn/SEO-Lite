@@ -13,7 +13,7 @@
  */
 class Seo_lite_upd {
 		
-	var $version        = '1.5.5';
+	var $version        = '1.5.6';
 	var $module_name = "Seo_lite";
 
     /**
